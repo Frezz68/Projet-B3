@@ -51,3 +51,8 @@ https://trello.com/invite/b/Y1OLPZDf/ATTI66ae14befef294fb08350c04eba992606A34D24
 ## Maquettes
 
 https://www.figma.com/file/vM47UfxEgBgyIbPgDBfpA1/Projet-B3?node-id=0%3A1&t=mlSP7aoVYvvwdJXu-1
+
+
+## Diagramme SQL
+
+https://drawsql.app/teams/team-412/diagrams/my-manager
