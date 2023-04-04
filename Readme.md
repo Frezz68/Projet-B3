@@ -11,6 +11,7 @@ Site Web type CRM, avec une interface d'administration proposant de la gestion d
 - Ajouter/Lire/Modifier/Supprimer les produits.
 - Ajouter/Lire/Modifier/Supprimer des clients.
 - Ajouter/Lire/Modifier/Supprimer les factures.
+- Réaliser des commandes (liée a un client et une facture).
 - Calcul de statistiques (CA, nombre de commandes, etc.).
 
 ### Pages disponnibles :
@@ -20,6 +21,7 @@ Site Web type CRM, avec une interface d'administration proposant de la gestion d
 - Page de gestion des produits.
 - Page de gestion des clients.
 - Page de gestion des factures.
+- Page création d'une commande.
 
 
 ## Base de données
@@ -36,12 +38,16 @@ Un projet Node.js avec le FrameWork TypeScript, Express et TypeORM.
 Un projet Vue.js pour l'interface, avec la bibliothèque Axios pour envoyer des requêtes HTTP à notre API back-end.
 
 Home page: 
-- Nombre de commande de la semaine 
-- CA de la semaine
-- Nombre de produit
-- Nombre de client
-- Nombre de facture
+- Nombre de commande de la semaine.
+- CA de la semaine.
+- Nombre de produit.
+- Nombre de client.
+- Nombre de facture.
 
 ## Répartition  des tâches
 
 https://trello.com/invite/b/Y1OLPZDf/ATTI66ae14befef294fb08350c04eba992606A34D249/projet
+
+## Maquettes
+
+https://www.figma.com/file/vM47UfxEgBgyIbPgDBfpA1/Projet-B3?node-id=0%3A1&t=mlSP7aoVYvvwdJXu-1
