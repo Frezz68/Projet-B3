@@ -6,7 +6,7 @@ userRoute.get('/', (req, res) => {
     res.send('Hello Express Router!');
 });
 
-userRoute.get('/example', (req, res) => {
+userRoute.post('/login', (req, res) => {
     res.send('This is an example route');
 });
 
