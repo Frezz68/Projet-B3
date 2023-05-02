@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from 'typeorm';
+import {Facture} from "./Facture";
 
 @Entity()
 export class User {
@@ -11,6 +12,6 @@ export class User {
     @Column()
     password: string;
 
-    @Column()
-    token: string;
+    @OneToMany(() => Facture, (facture) => facture.creeePar)
+    factures: Facture[];
 }

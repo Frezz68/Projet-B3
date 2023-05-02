@@ -1,13 +1,14 @@
 import { Router } from 'express';
+import { checkToken } from '../../middleware/tokenMiddleware';
+import * as UserControllers from './users-controller';
+
 
 const userRoute = Router();
 
-userRoute.get('/', (req, res) => {
-    res.send('Hello Express Router!');
-});
-
-userRoute.post('/login', (req, res) => {
-    res.send('This is an example route');
-});
+userRoute.get('/',checkToken, UserControllers.getUsers);
+userRoute.get('/:id',checkToken, UserControllers.getUserById);
+userRoute.post('/login', UserControllers.login);
+userRoute.put('/register', UserControllers.register);
+userRoute.delete('/:id',checkToken, UserControllers.deleteUser);
 
 export default userRoute;

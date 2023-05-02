@@ -1,17 +1,17 @@
 import { Router } from 'express';
+import {checkToken} from "../../middleware/tokenMiddleware";
+import * as UserControllers from './produits-controller';
 
 const produitsRoute = Router();
 
-produitsRoute.get('/', (req, res) => {
-    res.send('Hello Express Router!');
-});
+produitsRoute.get('/',checkToken, UserControllers.getProduits);
 
-produitsRoute.get('/:id', (req, res) => {
-    res.send('This is an example route');
-});
+produitsRoute.get('/:id',checkToken, UserControllers.getProduitById);
 
-produitsRoute.put('/', (req, res) => {
-    
-});
+produitsRoute.put('/',checkToken, UserControllers.createProduit);
+
+produitsRoute.delete('/:id',checkToken, UserControllers.deleteProduit);
+
+produitsRoute.post('/:id',checkToken, UserControllers.updateProduit);
 
 export default produitsRoute;
