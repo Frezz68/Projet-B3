@@ -56,6 +56,7 @@
 .Titre span {
   color: #3f72b7;
   font-size: 1.5rem;
+  text-decoration: underline;
 }
 
 .row {
@@ -71,7 +72,10 @@
   display: flex;
   width: 30vw;
   height: 20vh;
-  background-color: #afadad;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border : 3px solid #3f72b7;
+
 }
 
 .Section {

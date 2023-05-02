@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import express from 'express';
+const cors = require('cors');
 import API_V1_ROUTER from "./routes";
 import { createConnection } from 'typeorm';
 import bodyParser from 'body-parser';
@@ -15,6 +16,7 @@ createConnection()
     .catch((error: any) => console.log('Error connecting to database:', error));
 
 app.use(express.json());
+app.use(cors());
 app.use(prefix,API_V1_ROUTER);
 
 app.listen(port, () => {

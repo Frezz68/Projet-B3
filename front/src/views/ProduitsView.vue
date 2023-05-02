@@ -1,180 +1,22 @@
 <script setup>
-const produits = [
-  {
-    photo: null,
-    name: "Produit 1",
-    prix: 10,
-    stock: 10
-  },
-  {
-    photo: null,
-    name: "Produit 2",
-    prix: 20,
-    stock: 20
-  },
-  {
-    photo: null,
-    name: "Produit 3",
-    prix: 30,
-    stock: 30
-  },
-  {
-    photo: null,
-    name: "Produit 4",
-    prix: 40,
-    stock: 40
-  },
-  {
-    photo: null,
-    name: "Produit 5",
-    prix: 50,
-    stock: 50
-  },
-  {
-    photo: null,
-    name: "Produit 2",
-    prix: 20,
-    stock: 20
-  },
-  {
-    photo: null,
-    name: "Produit 3",
-    prix: 30,
-    stock: 30
-  },
-  {
-    photo: null,
-    name: "Produit 4",
-    prix: 40,
-    stock: 40
-  },
-  {
-    photo: null,
-    name: "Produit 5",
-    prix: 50,
-    stock: 50
-  },
-  {
-    photo: null,
-    name: "Produit 2",
-    prix: 20,
-    stock: 20
-  },
-  {
-    photo: null,
-    name: "Produit 3",
-    prix: 30,
-    stock: 30
-  },
-  {
-    photo: null,
-    name: "Produit 4",
-    prix: 40,
-    stock: 40
-  },
-  {
-    photo: null,
-    name: "Produit 5",
-    prix: 50,
-    stock: 50
-  },
-  {
-    photo: null,
-    name: "Produit 2",
-    prix: 20,
-    stock: 20
-  },
-  {
-    photo: null,
-    name: "Produit 3",
-    prix: 30,
-    stock: 30
-  },
-  {
-    photo: null,
-    name: "Produit 4",
-    prix: 40,
-    stock: 40
-  },
-  {
-    photo: null,
-    name: "Produit 5",
-    prix: 50,
-    stock: 50
-  },
-  {
-    photo: null,
-    name: "Produit 2",
-    prix: 20,
-    stock: 20
-  },
-  {
-    photo: null,
-    name: "Produit 3",
-    prix: 30,
-    stock: 30
-  },
-  {
-    photo: null,
-    name: "Produit 4",
-    prix: 40,
-    stock: 40
-  },
-  {
-    photo: null,
-    name: "Produit 5",
-    prix: 50,
-    stock: 50
-  },
-  {
-    photo: null,
-    name: "Produit 2",
-    prix: 20,
-    stock: 20
-  },
-  {
-    photo: null,
-    name: "Produit 3",
-    prix: 30,
-    stock: 30
-  },
-  {
-    photo: null,
-    name: "Produit 4",
-    prix: 40,
-    stock: 40
-  },
-  {
-    photo: null,
-    name: "Produit 5",
-    prix: 50,
-    stock: 50
-  },
-  {
-    photo: null,
-    name: "Produit 2",
-    prix: 20,
-    stock: 20
-  },
-  {
-    photo: null,
-    name: "Produit 3",
-    prix: 30,
-    stock: 30
-  },
-  {
-    photo: null,
-    name: "Produit 4",
-    prix: 40,
-    stock: 40
-  },
-  {
-    photo: null,
-    name: "Produit 5",
-    prix: 50,
-    stock: 50
+import { ServiceProduits } from "../services/produits.js";
+import {reactive} from "vue";
+
+let produits = reactive([])
+
+const getAllProduits = async () => {
+  const response = await ServiceProduits.getAllProduits()
+  if (response.status === 200) {
+    const result = await response.json()
+    produits.splice(0)
+    for (let produit of result) {
+      produits.push(produit)
+    }
   }
-]
+}
+
+getAllProduits()
+
 </script>
 
 <template>
@@ -183,23 +25,29 @@ const produits = [
       <span>Gestions des produits</span>
     </div>
 
+    <div class="createButton">
+      <img src="../assets/plus.png" alt="créer"/>
+    </div>
+
     <div class="Tableau">
       <table>
         <thead>
-        <tr>
-          <th>Photo</th>
-          <th>Nom</th>
-          <th>Prix</th>
-          <th>Stock</th>
-        </tr>
+          <tr>
+            <th>Photo</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Prix</th>
+            <th>Stock</th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="produit in produits" :key="id">
-          <td>{{ produit.photo }}</td>
-          <td>{{ produit.name }}</td>
-          <td>{{ produit.prix }}</td>
-          <td>{{ produit.stock }}</td>
-        </tr>
+          <tr v-for="produit in produits" :key="id">
+            <td>{{ produit.pathToImage }}</td>
+            <td>{{ produit.nom }}</td>
+            <td>{{ produit.description }}</td>
+            <td>{{ produit.prix }}</td>
+            <td>{{ produit.qteStock }}</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -224,6 +72,16 @@ const produits = [
 .Titre span {
   color: #3f72b7;
   font-size: 1.5rem;
+  text-decoration: underline;
+}
+
+.createButton {
+  display: flex;
+  position: absolute;
+  right: 4vh;
+  top: 4vh;
+  height: 5vh;
+  width: auto;
 }
 
 table {
@@ -243,6 +101,7 @@ th, td {
 th {
   background-color: #739cd3;
   font-weight: bold;
+  color: white;
 }
 
 tr:nth-child(even) {
@@ -254,11 +113,11 @@ tr:hover {
 }
 
 td:nth-child(4),
-td:nth-child(3) {
+td:nth-child(5) {
   text-align: right;
 }
 
-td:nth-child(3):after {
+td:nth-child(4):after {
   content: " €";
 }
 
