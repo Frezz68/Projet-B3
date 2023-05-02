@@ -46,10 +46,13 @@ const isActiveRoute = (path) => {
   height: 100%;
   width: 100%;
   background-color: #ffffff;
+  border-right: 2px solid #3f72b7;
+
 }
 .left-panel h3 {
   text-align: center;
   border: 2px solid #3f72b7;
+  border-radius: 7px;
   margin: 3px;
   background-color: #ffffff;
   color: #3f72b7;
@@ -69,7 +72,7 @@ const isActiveRoute = (path) => {
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: 5px;
-  border-radius: 7px;
+  border-radius: 10px;
   height: 100%;
   font-size: 20px;
   width: 90%;
