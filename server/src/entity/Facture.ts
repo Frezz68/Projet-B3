@@ -11,6 +11,9 @@ export class Facture {
     dateEmmission: Date;
 
     @Column()
+    lastModif: Date;
+
+    @Column()
     payee: boolean;
 
     @Column()
