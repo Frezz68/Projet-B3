@@ -58,3 +58,13 @@ export async function deleteUser (req :Request, res :Response)  {
     await userRepository.delete(id);
     res.send({message: 'User deleted'});
 }
+export async function extendSession (req :Request, res :Response)  {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return res.status(401).json({ error: 'No token provided' });
+    }
+    const token = generateToken({userId: null});
+    res.send({ token: token});
+
+}
