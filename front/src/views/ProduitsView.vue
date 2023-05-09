@@ -1,5 +1,5 @@
 <script setup>
-import { ServiceProduits } from "../services/produits.js";
+import { ServiceProduits } from "../services/ServiceProduit.js";
 import {reactive} from "vue";
 import {showPanel} from "@/utils";
 import LeftPanel from "@/components/LeftPanel.vue";
@@ -25,8 +25,13 @@ getAllProduits()
 </script>
 
 <template>
+    <div class="test" v-if="showPanel">
+        <RightPanel/>
+    </div>
     <LeftPanel/>
+
   <div class="Page">
+
     <div class="Titre">
       <span>Gestions des produits</span>
     </div>
@@ -56,14 +61,13 @@ getAllProduits()
           </tr>
         </tbody>
       </table>
+
     </div>
 
 
 
   </div>
-    <div class="test" v-if="showPanel">
-        <RightPanel/>
-    </div>
+
 </template>
 
 <style scoped>

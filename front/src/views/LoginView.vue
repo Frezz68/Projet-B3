@@ -1,18 +1,43 @@
 <script setup>
+import {ServiceUtilisateur} from "../services/ServiceUser.js";
+import {useRouter} from "vue-router";
 
+let login;
+let password;
+
+const router = useRouter();
+const logIn = async () => {
+    console.log("login", login)
+    if(login.trim() !== "" && password.trim() !== "") {
+        ServiceUtilisateur.logIn(login, password)
+            .then(async (response) => {
+                const result = await response.json();
+                console.log(result);
+                if(response.status === 200) {
+                    localStorage.setItem("token", result.token)
+                    await router.push({ path: '/home' })
+                } else {
+                    this.error = result.message;
+                }
+            });
+    }
+}
 </script>
 
 <template>
     <div class="login-container">
         <div class="panneau">
             <div class="login-box">
+
                 <h2>Ha, te revoilà !</h2>
                 <h4>Nous sommes si heureux de te revoir !</h4>
-                <label for="user">Nom d'utilisateur </label>
-                <input v-model="username" type="text" id="user" required><br>
-                <label for="password">Mot de passe </label>
+                <label for="user">Nom d'utilisateur </label><br>
+                <input v-model="login" type="text" id="user" required><br>
+                <label for="password">Mot de passe </label><br>
                 <input v-model="password" type="password" id="password" required><br>
-                <button class="button" v-on:click="login">Log In</button>
+                    <form @submit.prevent="logIn()">
+                <button class="button">Log In</button>
+                </form>
             </div>
         </div>
 
@@ -38,11 +63,6 @@
     width: 60%;
 }
 
-.login-box {
-    display: inline-block;
-    width: 60%;
-    vertical-align: top;
-}
 
 @media (max-width: 1000px) {
     .login-box {
@@ -60,8 +80,9 @@ h4 {
 }
 .login-box input[type="text"],
 .login-box input[type="password"] {
-    width: 80%;
-    padding: 10px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
     margin-bottom: 20px;
     color: white;
     background-color: #1e1f22;
@@ -82,8 +103,9 @@ h4 {
     color: red;
 }
 .button {
-    width: 85%;
-    padding: 10px;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
     background-color: #5765f2;
     color: white;
     border: none;
@@ -101,25 +123,5 @@ h4 {
         width: 99%;
     }
 }
-
-.QRCode-box {
-    display: inline-block;
-    width: 40%;
-    vertical-align: top;
-}
-
-@media (max-width: 1000px) {
-    .QRCode-box {
-        display: none;
-    }
-}
-
-.QRCode-box img {
-    margin-top: 5%;
-    margin-left: 30%;
-    width: 40%;
-    height: auto;
-}
-
 
 </style>
