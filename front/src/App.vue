@@ -1,22 +1,9 @@
 <script setup>
-import { RouterView } from 'vue-router'
-import LeftPanel from "@/components/LeftPanel.vue";
-import RighPanel from "@/components/RightPanelProduits.vue";
-import {reactive} from "vue";
-import {showPanel} from "@/utils";
-
+import {RouterView, useRoute} from 'vue-router'
 </script>
 
 <template>
-  <div class="all">
-    <div class="left-panel">
-      <LeftPanel/>
-    </div>
-    <RouterView />
-      <div class="test" v-if="showPanel">
-          <RighPanel/>
-      </div>
-  </div>
+  <RouterView />
 </template>
 
 <style scoped>
