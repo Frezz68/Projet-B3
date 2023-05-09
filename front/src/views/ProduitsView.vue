@@ -2,6 +2,8 @@
 import { ServiceProduits } from "../services/produits.js";
 import {reactive} from "vue";
 import {showPanel} from "@/utils";
+import LeftPanel from "@/components/LeftPanel.vue";
+import RightPanel from "@/components/RightPanelProduits.vue";
 
 let produits = reactive([])
 
@@ -23,6 +25,7 @@ getAllProduits()
 </script>
 
 <template>
+    <LeftPanel/>
   <div class="Page">
     <div class="Titre">
       <span>Gestions des produits</span>
@@ -58,15 +61,23 @@ getAllProduits()
 
 
   </div>
+    <div class="test" v-if="showPanel">
+        <RightPanel/>
+    </div>
 </template>
 
 <style scoped>
+.left-panel {
+    display: inline-block;
+    width: 20vw;
+    height: 100vh;
+    vertical-align: top;
+}
+
 .Page {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: scroll;
+    display: inline-block;
+    width: 79vw;
+    height: 100vh;
 }
 
 .Titre {
@@ -79,6 +90,13 @@ getAllProduits()
   color: #3f72b7;
   font-size: 1.5rem;
   text-decoration: underline;
+}
+.test {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
 }
 
 .createButton {

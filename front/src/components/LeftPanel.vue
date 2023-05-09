@@ -12,28 +12,28 @@ const isActiveRoute = (path) => {
   <div class="left-panel">
     <h3>CRM</h3>
     <ul>
-        <RouterLink class="decoration" :to="`/Home`" :class="{ 'active': isActiveRoute('/Home'), 'decoration': !isActiveRoute('/Home') }">
-          <li class="li" :class="{ 'liRoute': isActiveRoute('/Home'), 'li': !isActiveRoute('/Home') }">
+        <RouterLink class="decoration" :to="`/Home`" :class="{ 'active': isActiveRoute('/home'), 'decoration': !isActiveRoute('/home') }">
+          <li class="li" :class="{ 'liRoute': isActiveRoute('/home'), 'li': !isActiveRoute('/home') }">
             🏠 Home
           </li>
         </RouterLink>
-      <RouterLink class="decoration" :to="`/Produits`" :class="{ 'active': isActiveRoute('/Produits'), 'decoration': !isActiveRoute('/Produits') }">
-        <li class="li" :class="{ 'liRoute': isActiveRoute('/Produits'), 'li': !isActiveRoute('/Produits') }">
+      <RouterLink class="decoration" :to="`/produits`" :class="{ 'active': isActiveRoute('/produits'), 'decoration': !isActiveRoute('/produits') }">
+        <li class="li" :class="{ 'liRoute': isActiveRoute('/produits'), 'li': !isActiveRoute('/produits') }">
           🛏️ Produits
         </li>
       </RouterLink>
-      <RouterLink class="decoration" :to="`/Commandes`" :class="{ 'active': isActiveRoute('/Commandes'), 'decoration': !isActiveRoute('/Commandes') }">
-        <li class="li" :class="{ 'liRoute': isActiveRoute('/Commandes'), 'li': !isActiveRoute('/Commandes') }">
+      <RouterLink class="decoration" :to="`/commandes`" :class="{ 'active': isActiveRoute('/commandes'), 'decoration': !isActiveRoute('/commandes') }">
+        <li class="li" :class="{ 'liRoute': isActiveRoute('/commandes'), 'li': !isActiveRoute('/commandes') }">
           🛒 Commandes
         </li>
       </RouterLink>
-      <RouterLink class="decoration" :to="`/Factures`" :class="{ 'active': isActiveRoute('/Factures'), 'decoration': !isActiveRoute('/Factures') }">
-        <li class="li" :class="{ 'liRoute': isActiveRoute('/Factures'), 'li': !isActiveRoute('/Factures') }">
+      <RouterLink class="decoration" :to="`/factures`" :class="{ 'active': isActiveRoute('/factures'), 'decoration': !isActiveRoute('/factures') }">
+        <li class="li" :class="{ 'liRoute': isActiveRoute('/factures'), 'li': !isActiveRoute('/factures') }">
           📄 Factures
         </li>
       </RouterLink>
-      <RouterLink class="decoration" :to="`/Clients`" :class="{ 'active': isActiveRoute('/Clients'), 'decoration': !isActiveRoute('/Clients') }">
-        <li class="li" :class="{ 'liRoute': isActiveRoute('/Clients'), 'li': !isActiveRoute('/Clients') }">
+      <RouterLink class="decoration" :to="`/Clients`" :class="{ 'active': isActiveRoute('/clients'), 'decoration': !isActiveRoute('/clients') }">
+        <li class="li" :class="{ 'liRoute': isActiveRoute('/clients'), 'li': !isActiveRoute('/clients') }">
           👨‍🦰 Clients
         </li>
       </RouterLink>
@@ -43,10 +43,10 @@ const isActiveRoute = (path) => {
 
 <style scoped>
 .left-panel {
-  height: 100%;
-  width: 100%;
-  background-color: #ffffff;
-  border-right: 2px solid #3f72b7;
+    width: 20vw;
+    height: 100vh;
+    vertical-align: top;
+    border-right: 2px solid #3f72b7;
 
 }
 .left-panel h3 {

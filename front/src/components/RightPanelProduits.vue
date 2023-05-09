@@ -41,6 +41,7 @@ const save = async () => {
 </template>
 
 <style scoped>
+
 .right-panel {
     height: 100%;
     width: 30%;
@@ -51,6 +52,7 @@ const save = async () => {
     top: 0;
     bottom: 0;
     z-index: 999;
+
 }
 
 .closeBtn {
