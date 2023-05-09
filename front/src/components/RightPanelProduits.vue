@@ -16,6 +16,7 @@ const isActiveRoute = (path) => {
 </template>
 
 <style scoped>
+
 .right-panel {
     height: 100%;
     width: 30%;
@@ -26,7 +27,6 @@ const isActiveRoute = (path) => {
     top: 0;
     bottom: 0;
     z-index: 999;
-
 }
 
 </style>
