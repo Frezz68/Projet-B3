@@ -1,8 +1,11 @@
 <script setup>
 import { ServiceProduits } from "../services/produits.js";
 import {reactive} from "vue";
+import {showPanel} from "@/utils";
 
 let produits = reactive([])
+
+
 
 const getAllProduits = async () => {
   const response = await ServiceProduits.getAllProduits()
@@ -26,7 +29,7 @@ getAllProduits()
     </div>
 
     <div class="createButton">
-      <img src="../assets/plus.png" alt="créer"/>
+      <img @click="showPanel = true" src="../assets/plus.png" alt="créer"/>
     </div>
 
     <div class="Tableau">
@@ -51,6 +54,9 @@ getAllProduits()
         </tbody>
       </table>
     </div>
+
+
+
   </div>
 </template>
 
@@ -120,6 +126,7 @@ td:nth-child(5) {
 td:nth-child(4):after {
   content: " €";
 }
+
 
 
 </style>

@@ -1,6 +1,10 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import LeftPanel from "@/components/LeftPanel.vue";
+import RighPanel from "@/components/RightPanelProduits.vue";
+import {reactive} from "vue";
+import {showPanel} from "@/utils";
+
 </script>
 
 <template>
@@ -9,6 +13,9 @@ import LeftPanel from "@/components/LeftPanel.vue";
       <LeftPanel/>
     </div>
     <RouterView />
+      <div class="test" v-if="showPanel">
+          <RighPanel/>
+      </div>
   </div>
 </template>
 
@@ -25,4 +32,12 @@ import LeftPanel from "@/components/LeftPanel.vue";
   vertical-align: top;
 }
 
+
+.test {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
 </style>
