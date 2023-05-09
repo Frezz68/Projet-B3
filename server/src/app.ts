@@ -1,9 +1,8 @@
 import 'reflect-metadata';
 import express from 'express';
-const cors = require('cors');
+import cors from 'cors';
 import API_V1_ROUTER from "./routes";
 import { createConnection } from 'typeorm';
-import bodyParser from 'body-parser';
 
 const app = express();
 const port = process.env.PORT || 3000;

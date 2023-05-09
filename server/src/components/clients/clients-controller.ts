@@ -23,7 +23,7 @@ export async function getClientById (req :Request, res :Response)  {
 
 export async function createClient (req :Request, res :Response)  {
     const {nom, prenom, email, adresse, dateCreation, codePostal, ville, pays, telephone} = req.body;
-    if( !nom || !prenom || !email || !adresse) return res.status(400).json({error: 'Missing nom or prenom or email or password'});
+    if( !nom || !prenom || !email || !adresse || !dateCreation || !codePostal || !ville || !pays || !telephone) return res.status(400).json({error: 'Missing fields'});
     const clientRepository = getRepository(Client);
     const newClient = clientRepository.create({nom: nom, prenom: prenom, email: email, adresse: adresse, dateCreation: dateCreation, codePostal: codePostal, ville: ville, pays: pays, telephone: telephone});
     await clientRepository.save(newClient);
@@ -33,21 +33,23 @@ export async function createClient (req :Request, res :Response)  {
 export async function updateClient (req :Request, res :Response)  {
     const id = req.params.id;
     const {nom, prenom, email, adresse, dateCreation, codePostal, ville, pays, telephone} = req.body;
-    if( !nom || !prenom || !email || !adresse) return res.status(400).json({error: 'Missing nom or prenom or email or password'});
+
     const clientRepository = getRepository(Client);
     const client = await clientRepository.findOne({where: {idClient: parseInt(id)}});
+
     if (!client) {
         return res.status(404).json({error: 'Client not found'});
     }
-    client.nom = nom;
-    client.prenom = prenom;
-    client.email = email;
-    client.adresse = adresse;
-    client.dateCreation = dateCreation;
-    client.codePostal = codePostal;
-    client.ville = ville;
-    client.pays = pays;
-    client.telephone = telephone;
+    if (nom !== undefined) client.nom = nom;
+    if (prenom !== undefined) client.prenom = prenom;
+    if (email !== undefined) client.email = email;
+    if (adresse !== undefined) client.adresse = adresse;
+    if (dateCreation !== undefined) client.dateCreation = dateCreation;
+    if (codePostal !== undefined) client.codePostal = codePostal;
+    if (ville !== undefined) client.ville = ville;
+    if (pays !== undefined) client.pays = pays;
+    if (telephone !== undefined) client.telephone = telephone;
+
     await clientRepository.save(client);
     res.send({message: 'Client updated'});
 }

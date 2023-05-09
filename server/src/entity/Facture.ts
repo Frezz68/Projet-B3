@@ -11,10 +11,13 @@ export class Facture {
     dateEmmission: Date;
 
     @Column()
+    lastModif: Date;
+
+    @Column({ default: false })
     payee: boolean;
 
-    @Column()
-    datePaiement: Date;
+    @Column({ nullable: true })
+    datePaiement: Date | null;
 
     @Column('json')
     refProduit: JSON;

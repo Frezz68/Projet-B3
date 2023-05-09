@@ -21,10 +21,10 @@ export async function login (req :Request, res :Response)  {
 }
 
 export async function register (req :Request, res :Response)  {
-    const {username, password} = req.body;
-    if( !username || !password) return res.status(400).json({error: 'Missing username or password'});
+    const {login, password} = req.body;
+    if( !login || !password) return res.status(400).json({error: 'Missing login or password'});
     const userRepository = getRepository(User);
-    const newUser = userRepository.create({login: username, password: await hash(password)});
+    const newUser = userRepository.create({login: login, password: await hash(password)});
     await userRepository.save(newUser);
     res.status(201).json({message: 'User created'});
 }
@@ -57,4 +57,14 @@ export async function deleteUser (req :Request, res :Response)  {
     }
     await userRepository.delete(id);
     res.send({message: 'User deleted'});
+}
+export async function extendSession (req :Request, res :Response)  {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return res.status(401).json({ error: 'No token provided' });
+    }
+    const token = generateToken({userId: null});
+    res.send({ token: token});
+
 }
