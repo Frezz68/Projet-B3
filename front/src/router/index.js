@@ -15,12 +15,28 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+        beforeEnter: (to, from) => {
+          if(localStorage.getItem('token') == null){
+            router.push("/");
+          }
+          else{
+            return true;
+          }
+        }
     },
     {
       path: '/produits',
       name: 'produits',
-      component: ProduitsView
+      component: ProduitsView,
+      beforeEnter: (to, from) => {
+        if(localStorage.getItem('token') == null){
+          router.push("/");
+        }
+        else{
+          return true;
+        }
+      },
     },
     {
       path: "/:pathMatch(.*)*",
