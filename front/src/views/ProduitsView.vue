@@ -25,11 +25,16 @@ getAllProduits()
 </script>
 
 <template>
-    <div class="test" v-if="showPanel">
-        <RightPanel/>
-    </div>
-    <LeftPanel/>
-
+  <div class="test" v-if="showPanel">
+      <RightPanel>
+          <template v-slot:titre>
+              <div class="TitreRightPanel">
+                  <span>Création d'un produit</span>
+              </div>
+          </template>
+      </RightPanel>/
+  </div>
+  <LeftPanel/>
   <div class="Page">
 
     <div class="Titre">
@@ -63,11 +68,7 @@ getAllProduits()
       </table>
 
     </div>
-
-
-
   </div>
-
 </template>
 
 <style scoped>
@@ -149,6 +150,12 @@ td:nth-child(4):after {
   content: " €";
 }
 
+.TitreRightPanel span {
+    margin-left: 10px;
+    color: #3f72b7;
+    font-size: 1.5rem;
+    text-decoration: underline;
+}
 
 
 </style>
