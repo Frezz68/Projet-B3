@@ -30,6 +30,7 @@ export class Facture {
     @JoinColumn({ name: 'modifieePar' })
     modifieePar: User;
 
+
     @ManyToOne(() => Client, (client) => client.factures,{ nullable: false })
     @JoinColumn({ name: 'idClient' })
     Client: Client;
