@@ -4,11 +4,24 @@ import {showPanel} from "@/utils"
 import {ServiceProduits} from "@/services/ServiceProduit";
 const route = useRoute()
 
+const emit = defineEmits(['refresh']);
+
+const props = defineProps({
+    produit: Object
+})
 let nameProduit = ""
 let prixProduit = ""
 let quantiteProduit = ""
 let descriptionProduit = ""
 let imageProduit = ""
+
+if (props.produit) {
+    nameProduit = props.produit.nom
+    prixProduit = props.produit.prix
+    quantiteProduit = props.produit.qteStock
+    descriptionProduit = props.produit.description
+    imageProduit = props.produit.pathToImage
+}
 
 const save = async () => {
     console.log("save", route.path)
@@ -21,13 +34,18 @@ const save = async () => {
                 pathToImage: imageProduit,
                 quantite: quantiteProduit
             });
-            console.log("RP", data)
-            const response = await ServiceProduits.addProduit(data)
-            console.log("reponse", response)
-            if (response.status === 201) {
-                showPanel.value = false
+            if (props.produit.idProduit ) {
+                const response = await ServiceProduits.updateProduit(props.produit.idProduit, data)
+                if (response.status === 200) {
+                    showPanel.value = false
+                }
+            }else {
+                const response = await ServiceProduits.addProduit(data)
+                if (response.status === 201) {
+                    showPanel.value = false
+                }
             }
-
+            refresh();
             break;
         case "/commandes":
             console.log("commandes")
@@ -48,6 +66,10 @@ const save = async () => {
     }
 
 }
+const refresh = () => {
+    emit('refresh')
+}
+
 </script>
 
 <template>

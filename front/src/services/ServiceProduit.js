@@ -8,11 +8,9 @@ export const ServiceProduits = {
         return ServiceXhr.callWithAuthNoBody('http://localhost:3000/api/v1/produit/' + id, "GET");
     },
     addProduit: async (data) => {
-        console.log(data)
         return ServiceXhr.callWithAuth('http://localhost:3000/api/v1/produit/', data, "PUT");
     },
-    updateProduit: async (id, nom, prix, description, image, qteStock) => {
-        const data = JSON.stringify({ nom: nom, prix: prix, description: description, pathToImage: image, quantite: qteStock });
+    updateProduit: async (id, data) => {
         return ServiceXhr.callWithAuth('http://localhost:3000/api/v1/produit/' + id, data, "POST");
     },
     deleteProduit: async (id) => {

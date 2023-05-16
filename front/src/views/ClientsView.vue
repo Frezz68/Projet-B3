@@ -1,52 +1,52 @@
 <script setup>
-import { ServiceProduits } from "../services/ServiceProduit.js";
+import { ServiceClients } from "../services/ServiceClient.js";
 import {reactive} from "vue";
 import {showPanel} from "@/utils";
 import LeftPanel from "@/components/LeftPanel.vue";
 import RightPanel from "@/components/RightPanelProduits.vue";
 
-let produits = reactive([])
+let clients = reactive([])
 
-let produit = reactive([])
+let client = reactive([])
 
-const getAllProduits = async () => {
-  const response = await ServiceProduits.getAllProduits()
+const getAllClients = async () => {
+  const response = await ServiceClients.getAllClients()
   if (response.status === 200) {
     const result = await response.json()
-    produits.splice(0)
-    for (let produit of result) {
-      produits.push(produit)
+      clients.splice(0)
+    for (let client of result) {
+        clients.push(client)
     }
   }
 }
 
-const deleteProduit = async (id) => {
-  const response = await ServiceProduits.deleteProduit(id)
+const deleteClient = async (id) => {
+  const response = await ServiceClients.deleteClient(id)
   if (response.status === 200) {
-    getAllProduits()
+      getAllClients()
   }
 }
-const editProduit = async (id) => {
-  const response = await ServiceProduits.getProduitById(id)
+const editClient = async (id) => {
+  const response = await ServiceClients.getClientById(id)
   if (response.status === 200) {
     const result = await response.json()
-    produit = result
+    client = result
     showPanel.value = true
   }
 }
 
 const refreshData = () => {
-    produit= [];
-    getAllProduits()
+    client= [];
+    getAllClients()
 }
 
-getAllProduits()
+getAllClients()
 
 </script>
 
 <template>
   <div class="test" v-if="showPanel">
-      <RightPanel :produit="produit" @refresh="refreshData">
+      <RightPanel :client="client" @refresh="refreshData">
           <template v-slot:titre>
               <div class="TitreRightPanel">
                   <span>Création d'un produit</span>
@@ -58,7 +58,7 @@ getAllProduits()
   <div class="Page">
 
     <div class="Titre">
-      <span>Gestions des produits</span>
+      <span>Gestions des Clients</span>
     </div>
 
     <div class="createButton">
@@ -69,23 +69,21 @@ getAllProduits()
       <table>
         <thead>
           <tr>
-            <th>Photo</th>
             <th>Nom</th>
-            <th>Description</th>
-            <th>Prix</th>
-            <th>Stock</th>
+            <th>Adresse</th>
+            <th>Téléphone</th>
+            <th>Email</th>
+            <th>Date création</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="produit in produits" :key="id">
-            <td class="imageTableau">
-                  <img class="ImageProduit" :src="produit.pathToImage">
-            </td>
-            <td>{{ produit.nom }}</td>
-            <td>{{ produit.description }}</td>
-            <td>{{ produit.prix }}</td>
-            <td>{{ produit.qteStock }}</td>
+          <tr v-for="client in clients" :key="id">
+            <td>{{ client.nom }} {{ client.prenom }}</td>
+            <td>{{ client.adresse }},{{ client.codePostal }} {{ client.ville }} {{ client.pays }}</td>
+            <td>{{ client.telephone }}</td>
+            <td>{{ client.email }}</td>
+            <td>{{ client.dateCreation }}</td>
             <td class="action">
                 <img class="ImageDelete" src="../assets/poubelle.png" @click="deleteProduit(produit.idProduit)">
                 <img class="ImageDelete" src="../assets/editer.png" @click="editProduit(produit.idProduit)">

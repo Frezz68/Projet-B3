@@ -4,7 +4,12 @@ import { Request, Response } from 'express';
 
 export async function getFactures (req :Request, res :Response)  {
     const factureRepository = getRepository(Facture);
-    const factures = await factureRepository.find();
+    const factures = await factureRepository
+        .createQueryBuilder('facture')
+        .leftJoinAndSelect('facture.Client', 'client')
+        .leftJoin('facture.modifieePar', 'modifieePar')
+        .addSelect(['modifieePar.id','modifieePar.login' ])
+        .getMany();
     if (!factures) {
         return res.status(404).json({error: 'no factures found'});
     }
@@ -14,7 +19,13 @@ export async function getFactures (req :Request, res :Response)  {
 export async function getFactureById (req :Request, res :Response)  {
     const id = req.params.id;
     const factureRepository = getRepository(Facture);
-    const facture = await factureRepository.findOne({where: {idFacture: parseInt(id)}});
+    const facture = await factureRepository
+        .createQueryBuilder('facture')
+        .leftJoinAndSelect('facture.Client', 'client')
+        .leftJoin('facture.modifieePar', 'modifieePar')
+        .addSelect(['modifieePar.id','modifieePar.login'])
+        .where('idFacture = :id', { id: id })
+        .getOne();
     if (!facture) {
         return res.status(404).json({error: 'Facture not found'});
     }

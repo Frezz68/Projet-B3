@@ -11,8 +11,6 @@ export const ServiceXhr = {
         });
     },
     callWithAuthNoBody: async (url, methode) => {
-        console.log("url", url)
-
         return await fetch(url, {
             method: methode.toUpperCase(),
             headers: {
