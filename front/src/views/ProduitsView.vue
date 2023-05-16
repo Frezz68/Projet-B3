@@ -58,7 +58,9 @@ getAllProduits()
         </thead>
         <tbody>
           <tr v-for="produit in produits" :key="id">
-            <td>{{ produit.pathToImage }}</td>
+            <td>
+                <img class="ImageTableau" :src="produit.pathToImage">
+            </td>
             <td>{{ produit.nom }}</td>
             <td>{{ produit.description }}</td>
             <td>{{ produit.prix }}</td>
@@ -157,5 +159,8 @@ td:nth-child(4):after {
     text-decoration: underline;
 }
 
-
+.ImageTableau {
+    width: 20%;
+    height: auto;
+}
 </style>

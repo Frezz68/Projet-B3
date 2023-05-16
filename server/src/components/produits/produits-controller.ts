@@ -22,6 +22,7 @@ export async function getProduitById (req :Request, res :Response)  {
 }
 
 export async function createProduit (req :Request, res :Response)  {
+    console.log(req.body);
     const {nom, prix, description, quantite, pathToImage} = req.body;
     if( !nom || !prix || !description || !quantite || !pathToImage) return res.status(400).json({error: 'Missing nom or prix or description or quantite or pathToImage'});
     const produitRepository = getRepository(Produit);
