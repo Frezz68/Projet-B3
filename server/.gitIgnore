@@ -27,4 +27,4 @@ coverage
 *.sln
 *.sw?
 
-ormconfig.json
+./ormconfig.json
