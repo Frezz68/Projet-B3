@@ -22,24 +22,24 @@ export async function getFactureById (req :Request, res :Response)  {
 }
 
 export async function createFacture (req :Request, res :Response)  {
-    const {idClient, idProduit, idUser} = req.body;
-    if( !idClient || !idProduit || !idUser) return res.status(400).json({error: 'Missing idClient or idProduit or idUser'});
+    const {idClient, refProduits, idUser} = req.body;
+    if( !idClient || !refProduits || !idUser) return res.status(400).json({error: 'Missing idClient or idProduit or idUser'});
     const factureRepository = getRepository(Facture);
     const currentDate = new Date();
-    const newFacture = factureRepository.create({Client: idClient, refProduit: idProduit, dateEmmission: currentDate, lastModif:currentDate, creeePar: idUser, modifieePar: idUser});
+    const newFacture = factureRepository.create({Client: idClient, refProduit: refProduits, dateEmmission: currentDate, lastModif:currentDate, creeePar: idUser, modifieePar: idUser});
     await factureRepository.save(newFacture);
     res.status(201).json({message: 'Facture created'});
 }
 
 export async function updateFacture (req :Request, res :Response)  {
     const id = req.params.id;
-    const {idProduit, payee, idUser} = req.body;
+    const {refProduits, payee, idUser} = req.body;
     const factureRepository = getRepository(Facture);
     const facture = await factureRepository.findOne({where: {idFacture: parseInt(id)}});
     if (!facture) {
         return res.status(404).json({error: 'Facture not found'});
     }
-    if (idProduit !== undefined) facture.refProduit = idProduit;
+    if (refProduits !== undefined) facture.refProduit = refProduits;
     if (payee !== undefined) facture.payee = payee;
     if (payee === true) facture.datePaiement = new Date();
     else facture.datePaiement = null;
