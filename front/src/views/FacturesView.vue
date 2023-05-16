@@ -1,7 +1,41 @@
 <script setup>
 import jsPDFInvoiceTemplate from "jspdf-invoice-template";
+import {ServiceProduits} from "@/services/ServiceProduit";
+import {reactive} from "vue";
+import { ServiceFacture } from "../services/ServiceFacture.js";
 
+let factures = reactive([])
+let facture = reactive({})
+
+const getAllFactures = async () => {
+    const response = await ServiceFacture.getAllFactures()
+
+    console.log("response", response)
+    if (response.status === 200) {
+        const result = await response.json()
+        factures.splice(0)
+        for (let facture of result) {
+            factures.push(facture)
+        }
+        console.log("factures", factures)
+    }
+}
+
+const getFactureById = async (id) => {
+    const response = await ServiceFacture.getAllFactures()
+
+    console.log("response", response)
+    if (response.status === 200) {
+        facture = null
+        facture = await response.json()
+        console.log("facture", facture)
+        console.log("factureid", facture[0].idFacture)
+    }
+}
+getAllFactures()
+getFactureById(1)
 const generatePDF = () => {
+    props.invoice.num = factures[0].idFacture
     const pdfObject = jsPDFInvoiceTemplate(props);
     console.log(pdfObject)
 }
@@ -41,17 +75,16 @@ let props = {
     },
     contact: {
         label: "Facture de:",
-        name: "Client Name",
-        address: "Albania, Tirane, Astir",
-        phone: "(+355) 069 22 22 222",
-        email: "client@website.al",
-        otherInfo: "www.website.al",
+        name: null,
+        address: null,
+        phone: null,
+        email: null,
     },
     invoice: {
         label: "Numero de Facture: ",
-        num: 19,
-        invDate: "Date de Facture: 02/02/2021 10:17",
-        invGenDate: "Date de paiement: 02/02/2021 10:17",
+        num: null,
+        invDate: null,
+        invGenDate: null,
         headerBorder: false,
         tableBodyBorder: false,
         header: [
