@@ -1,6 +1,7 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import {showPanel} from "@/utils"
+import {ServiceProduits} from "@/services/ServiceProduit";
 const route = useRoute()
 
 let nameProduit = ""
@@ -12,19 +13,31 @@ let imageProduit = ""
 const save = async () => {
     console.log("save", route.path)
     switch (route.path) {
-        case "/Produits":
-            console.log("produits")
-            showPanel.value = false
+        case "/produits":
+            const data = JSON.stringify({
+                nom: nameProduit,
+                prix: prixProduit,
+                description: descriptionProduit,
+                pathToImage: imageProduit,
+                quantite: quantiteProduit
+            });
+            console.log("RP", data)
+            const response = await ServiceProduits.addProduit(data)
+            console.log("reponse", response)
+            if (response.status === 201) {
+                showPanel.value = false
+            }
+
             break;
-        case "/Commandes":
+        case "/commandes":
             console.log("commandes")
             showPanel.value = !showPanel
             break;
-        case "/Clients":
+        case "/clients":
             console.log("clients")
             showPanel.value = !showPanel
             break;
-        case "/Factures":
+        case "/factures":
             console.log("factures")
             showPanel.value = !showPanel
             break;

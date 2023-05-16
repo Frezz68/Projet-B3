@@ -14,7 +14,7 @@ export class Produit {
     @Column()
     qteStock: number;
 
-    @Column()
+    @Column({ type :"text"})
     pathToImage: string;
 
     @Column()
