@@ -20,6 +20,13 @@ const getAllProduits = async () => {
   }
 }
 
+const deleteProduit = async (id) => {
+  const response = await ServiceProduits.deleteProduit(id)
+  if (response.status === 200) {
+    getAllProduits()
+  }
+}
+
 getAllProduits()
 
 </script>
@@ -54,15 +61,19 @@ getAllProduits()
             <th>Description</th>
             <th>Prix</th>
             <th>Stock</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="produit in produits" :key="id">
-            <td>{{ produit.pathToImage }}</td>
+            <td class="imageTableau">
+                  <img class="ImageProduit" :src="produit.pathToImage">
+            </td>
             <td>{{ produit.nom }}</td>
             <td>{{ produit.description }}</td>
             <td>{{ produit.prix }}</td>
             <td>{{ produit.qteStock }}</td>
+            <td> <img class="ImageDelete" src="../assets/poubelle.png" @click="deleteProduit(produit.id)"> </td>
           </tr>
         </tbody>
       </table>
@@ -145,6 +156,11 @@ td:nth-child(4),
 td:nth-child(5) {
   text-align: right;
 }
+td:nth-child(1),
+td:nth-child(6) {
+    text-align: center;
+}
+
 
 td:nth-child(4):after {
   content: " €";
@@ -157,5 +173,13 @@ td:nth-child(4):after {
     text-decoration: underline;
 }
 
+.ImageProduit {
+    width: 20%;
+    height: 20%;
+}
 
+.ImageDelete {
+    width: 30px;
+    height: 30px;
+}
 </style>

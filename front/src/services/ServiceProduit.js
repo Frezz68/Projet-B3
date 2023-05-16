@@ -7,8 +7,8 @@ export const ServiceProduits = {
     getProduitById: async (id) => {
         return ServiceXhr.callWithAuthNoBody('http://localhost:3000/api/v1/produit/' + id, "GET");
     },
-    addProduit: async (nom, prix, description, image, qteStock) => {
-        const data = JSON.stringify({ nom: nom, prix: prix, description: description, pathToImage: image, quantite: qteStock });
+    addProduit: async (data) => {
+        console.log(data)
         return ServiceXhr.callWithAuth('http://localhost:3000/api/v1/produit/', data, "PUT");
     },
     updateProduit: async (id, nom, prix, description, image, qteStock) => {
