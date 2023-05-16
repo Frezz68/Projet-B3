@@ -1,6 +1,18 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, ManyToOne, JoinColumn} from 'typeorm';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToMany,
+    OneToOne,
+    ManyToOne,
+    JoinColumn,
+    ManyToMany,
+    JoinTable
+} from 'typeorm';
 import {Client} from "./Client";
 import {User} from "./User";
+import {Produit} from "./Produit";
+import {FactureProduit} from "./FactureProduit";
 
 @Entity()
 export class Facture {
@@ -19,8 +31,8 @@ export class Facture {
     @Column({ nullable: true })
     datePaiement: Date | null;
 
-    @Column('json')
-    refProduit: JSON;
+    @OneToMany(() => FactureProduit, (factureProduit) => factureProduit.facture)
+    produits: FactureProduit[];
 
     @ManyToOne(() => User, (user) => user.factures,{ nullable: false })
     @JoinColumn({ name: 'creeePar' })

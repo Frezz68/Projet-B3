@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany} from 'typeorm';
+import {Facture} from "./Facture";
+import {FactureProduit} from "./FactureProduit";
 
 @Entity()
 export class Produit {
@@ -19,4 +21,7 @@ export class Produit {
 
     @Column()
     prix: number;
+
+    @OneToMany(() => FactureProduit, (factureProduit) => factureProduit.produit)
+    factures: FactureProduit[];
 }
