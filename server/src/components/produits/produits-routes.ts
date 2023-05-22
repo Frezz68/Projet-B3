@@ -8,10 +8,10 @@ produitsRoute.get('/',checkToken, ProduitsControllers.getProduits);
 
 produitsRoute.get('/:id',checkToken, ProduitsControllers.getProduitById);
 
-produitsRoute.put('/',checkToken, ProduitsControllers.createProduit);
+produitsRoute.post('/',checkToken, ProduitsControllers.createProduit);
 
 produitsRoute.delete('/:id',checkToken, ProduitsControllers.deleteProduit);
 
-produitsRoute.post('/:id',checkToken, ProduitsControllers.updateProduit);
+produitsRoute.put('/:id',checkToken, ProduitsControllers.updateProduit);
 
 export default produitsRoute;

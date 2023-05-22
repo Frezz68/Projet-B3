@@ -103,13 +103,35 @@ export async function deleteFacture (req :Request, res :Response)  {
 export async function addProduitToFacture (req :Request,res :Response){
     const idFacture = req.params.id;
     const factureProduitRepository = getRepository(FactureProduit);
+    const factureRepository = getRepository(Facture);
+    const facture = await factureRepository.findOne({where: {idFacture: parseInt(idFacture)}});
+    const produits = req.body;
+    for (const produit of produits) {
+        const newFactureProduit = factureProduitRepository.create({facture: facture, produitId: produit.id, quantite: produit.quantite});
+        await factureProduitRepository.save(newFactureProduit);
+    }
+    res.status(201).json({message: 'Produits added to facture'});
 }
 
 export async function deleteProduitFromFacture (req :Request,res :Response){
-    const idFacture = req.params.id;
+    const { id, idProduit } = req.params;
     const factureProduitRepository = getRepository(FactureProduit);
+    const factureProduit = await factureProduitRepository.findOne({where: {factureId: parseInt(id), produitId: parseInt(idProduit)}});
+    if (!factureProduit) {
+        return res.status(404).json({error: 'FactureProduit not found'});
+    }
+    await factureProduitRepository.delete(factureProduit);
+    res.send({message: 'FactureProduit deleted'});
 }
 export async function updateProduitFromFacture (req :Request,res :Response){
-    const idFacture = req.params.id;
+    const { id, idProduit } = req.params;
     const factureProduitRepository = getRepository(FactureProduit);
+    const factureProduit = await factureProduitRepository.findOne({where: {factureId: parseInt(id), produitId: parseInt(idProduit)}});
+    if (!factureProduit) {
+        return res.status(404).json({error: 'FactureProduit not found'});
+    }
+    const {quantite} = req.body;
+    if (quantite !== undefined) factureProduit.quantite = quantite;
+    await factureProduitRepository.save(factureProduit);
+    res.send({message: 'FactureProduit updated'});
 }
