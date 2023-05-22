@@ -12,7 +12,7 @@ const isActiveRoute = (path) => {
   <div class="left-panel">
     <h3>CRM</h3>
     <ul>
-        <RouterLink class="decoration" :to="`/Home`" :class="{ 'active': isActiveRoute('/home'), 'decoration': !isActiveRoute('/home') }">
+        <RouterLink class="decoration" :to="`/home`" :class="{ 'active': isActiveRoute('/home'), 'decoration': !isActiveRoute('/home') }">
           <li class="li" :class="{ 'liRoute': isActiveRoute('/home'), 'li': !isActiveRoute('/home') }">
             🏠 Home
           </li>
@@ -32,7 +32,7 @@ const isActiveRoute = (path) => {
           📄 Factures
         </li>
       </RouterLink>
-      <RouterLink class="decoration" :to="`/Clients`" :class="{ 'active': isActiveRoute('/clients'), 'decoration': !isActiveRoute('/clients') }">
+      <RouterLink class="decoration" :to="`/clients`" :class="{ 'active': isActiveRoute('/clients'), 'decoration': !isActiveRoute('/clients') }">
         <li class="li" :class="{ 'liRoute': isActiveRoute('/clients'), 'li': !isActiveRoute('/clients') }">
           👨‍🦰 Clients
         </li>

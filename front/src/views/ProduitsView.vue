@@ -3,7 +3,7 @@ import { ServiceProduits } from "../services/ServiceProduit.js";
 import {reactive} from "vue";
 import {showPanel} from "@/utils";
 import LeftPanel from "@/components/LeftPanel.vue";
-import RightPanel from "@/components/RightPanelProduits.vue";
+import RightPanel from "@/components/RightPanel.vue";
 
 let produits = reactive([])
 
@@ -46,7 +46,7 @@ getAllProduits()
 
 <template>
   <div class="test" v-if="showPanel">
-      <RightPanel :produit="produit" @refresh="refreshData">
+      <RightPanel :produit="produit" :page="produit" @refresh="refreshData">
           <template v-slot:titre>
               <div class="TitreRightPanel">
                   <span>Création d'un produit</span>
@@ -69,7 +69,7 @@ getAllProduits()
       <table>
         <thead>
           <tr>
-            <th>Photo</th>
+            <th class="imageTableau">Photo</th>
             <th>Nom</th>
             <th>Description</th>
             <th>Prix</th>
@@ -79,16 +79,19 @@ getAllProduits()
         </thead>
         <tbody>
           <tr v-for="produit in produits" :key="id">
-            <td class="imageTableau">
+            <td class="">
                   <img class="ImageProduit" :src="produit.pathToImage">
             </td>
             <td>{{ produit.nom }}</td>
             <td>{{ produit.description }}</td>
             <td>{{ produit.prix }}</td>
             <td>{{ produit.qteStock }}</td>
-            <td class="action">
-                <img class="ImageDelete" src="../assets/poubelle.png" @click="deleteProduit(produit.idProduit)">
-                <img class="ImageDelete" src="../assets/editer.png" @click="editProduit(produit.idProduit)">
+            <td>
+                <div class="action">
+                    <img class="ImageAction" src="../assets/poubelle.png" @click="deleteProduit(produit.idProduit)">
+                    <img class="ImageAction" src="../assets/editer.png" @click="editProduit(produit.idProduit)">
+                </div>
+
             </td>
           </tr>
         </tbody>
@@ -190,15 +193,22 @@ td:nth-child(4):after {
 }
 
 .ImageProduit {
-    width: 20%;
-    height: 20%;
+    width: 100%;
+    height: 100%;
 }
 
-.ImageDelete {
+.ImageAction {
     width: 30px;
     height: 30px;
 }
+
+.imageTableau {
+    width: 50px;
+}
+
 .action {
+    display: flex;
+    justify-content: space-around;
 
 }
 </style>

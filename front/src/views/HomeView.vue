@@ -1,7 +1,90 @@
 <script setup>
 import {showPanel} from "@/utils";
 import LeftPanel from "@/components/LeftPanel.vue";
-import RightPanel from "@/components/RightPanelProduits.vue";
+import RightPanel from "@/components/RightPanel.vue";
+import {reactive} from "vue";
+import {ServiceFacture} from "@/services/ServiceFacture";
+import {ServiceClients} from "@/services/ServiceClient";
+
+let factures = reactive([])
+let facturesSemaine = reactive([])
+let clients = reactive([])
+
+let nbFacturesImpayéeSemaine = 0
+let CASemaine = 0
+let NewClientsSemaine = 0
+let dateSemaineAvant = new Date()
+dateSemaineAvant.setDate(dateSemaineAvant.getDate() - 7);
+dateSemaineAvant = new Date(dateSemaineAvant).toLocaleDateString()
+
+const getAllFactures = async () => {
+    const response = await ServiceFacture.getAllFactures()
+
+    console.log("response", response)
+    if (response.status === 200) {
+        const result = await response.json()
+        factures.splice(0)
+        for (let facture of result) {
+            facture.dateEmmission = new Date(facture.dateEmmission).toLocaleDateString()
+            facture.datePaiement = new Date(facture.datePaiement).toLocaleDateString()
+            factures.push(facture)
+        }
+        console.log("factures", factures)
+    }
+    getFacturesSemaine()
+
+}
+
+const getAllClients = async () => {
+    const response = await ServiceClients.getAllClients()
+    if (response.status === 200) {
+        const result = await response.json()
+        clients.splice(0)
+        for (let client of result) {
+            client.dateCreation = new Date(client.dateCreation).toLocaleDateString()
+            clients.push(client)
+            console.log("clients", client.dateCreation > dateSemaineAvant)
+            if (client.dateCreation > dateSemaineAvant)
+            {
+                console.log(NewClientsSemaine)
+
+                NewClientsSemaine += 1
+                console.log(NewClientsSemaine)
+            }
+        }
+    }
+}
+
+const getFacturesSemaine = async () => {
+    for (let facture of factures) {
+        if (facture.dateEmmission > dateSemaineAvant)
+        {
+            facturesSemaine.push(facture)
+        }
+    }
+    getFacturesImpayeeAndCASemaine()
+}
+
+const getFacturesImpayeeAndCASemaine = async () => {
+    for (let facture of facturesSemaine) {
+        if (facture.payee == false)
+        {
+            nbFacturesImpayéeSemaine += 1
+        } else {
+            let total = 0
+            let CASemaine = 0
+            for (let produit of facture.produits) {
+                total = total + (produit.quantite * produit.prix)
+            }
+            CASemaine += total
+        }
+    }
+}
+
+getAllFactures()
+getAllClients()
+
+
 </script>
 
 <template>
@@ -14,14 +97,14 @@ import RightPanel from "@/components/RightPanelProduits.vue";
         <div class="row">
             <div class="taille">
                 <div class="Section">
-                    <span class="Intitule">Nombre de commande :</span>
-                    <span class="Valeur">204</span>
+                    <span class="Intitule">Nouvelle commande :</span>
+                    <span class="Valeur">{{ facturesSemaine.length }}</span>
                 </div>
             </div>
             <div class="taille">
                 <div class="Section">
-                    <span class="Intitule">Chiffre d'affaire de la semain :</span>
-                    <span class="Valeur">203 405,99€</span>
+                    <span class="Intitule">Chiffre d'affaire de la semaine :</span>
+                    <span class="Valeur">{{ CASemaine }} €</span>
                 </div>
             </div>
         </div>
@@ -29,13 +112,13 @@ import RightPanel from "@/components/RightPanelProduits.vue";
             <div class="taille">
                 <div class="Section">
                     <span class="Intitule">Commande impayé :</span>
-                    <span class="Valeur">4</span>
+                    <span class="Valeur">{{ nbFacturesImpayéeSemaine }}</span>
                 </div>
             </div>
             <div class="taille">
                 <div class="Section">
-                    <span class="Intitule">Nouvelle commande :</span>
-                    <span class="Valeur">13</span>
+                    <span class="Intitule">Nouveau Client :</span>
+                    <span class="Valeur">{{ NewClientsSemaine }}</span>
                 </div>
             </div>
         </div>

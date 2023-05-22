@@ -2,9 +2,9 @@
 import jsPDFInvoiceTemplate from "jspdf-invoice-template";
 import {reactive} from "vue";
 import { ServiceFacture } from "../services/ServiceFacture.js";
+import LeftPanel from "@/components/LeftPanel.vue";
 
 let factures = reactive([])
-let facture = reactive({})
 
 const getAllFactures = async () => {
     const response = await ServiceFacture.getAllFactures()
@@ -14,28 +14,16 @@ const getAllFactures = async () => {
         const result = await response.json()
         factures.splice(0)
         for (let facture of result) {
+            facture.dateEmmission = new Date(facture.dateEmmission).toLocaleDateString()
+            facture.datePaiement = new Date(facture.datePaiement).toLocaleDateString()
             factures.push(facture)
         }
         console.log("factures", factures)
     }
 }
 
-const getFactureById = async (id) => {
-    const response = await ServiceFacture.getAllFactures()
-
-    console.log("response", response)
-    if (response.status === 200) {
-        facture = null
-        facture = await response.json()
-        console.log("facture", facture)
-        console.log("factureid", facture[0].idFacture)
-        console.log("length", facture[0].refProduit.length)
-    }
-
-}
 getAllFactures()
-getFactureById(1)
-const generatePDF = () => {
+const generatePDF = (facture) => {
     const produitsFacture = [
         {
             id : 1,
@@ -62,10 +50,18 @@ const generatePDF = () => {
             total : 60
         }
     ]
+    let total = 0
+    for (let produit of produitsFacture) {
+        total = total + (produit.quantite * produit.prix)
+    }
+    let totalTVA = total * 1.2
+    total = total.toString()
+    totalTVA = totalTVA.toString()
+
     let props = {
         outputType: jsPDFInvoiceTemplate.Save,
         returnJsPDFDocObject: true,
-        fileName: "TestPDF",
+        fileName: "Facture N°" + facture.idFacture + ".pdf",
         orientationLandscape: false,
         compress: true,
         logo: {
@@ -97,14 +93,14 @@ const generatePDF = () => {
         },
         contact: {
             label: "Facture de:",
-            name: "Nom : " + factures[0].Client.nom + " " + factures[0].Client.prenom,
-            address: "Adresse : " + factures[0].Client.adresse + " " + factures[0].Client.codePostal + " " + factures[0].Client.ville,
-            phone: "Telephone : " + factures[0].Client.telephone,
-            email: "Email : " + factures[0].Client.email,
+            name: "Nom : " + facture.Client.nom + " " + facture.Client.prenom,
+            address: "Adresse : " + facture.Client.adresse + " " + facture.Client.codePostal + " " + facture.Client.ville,
+            phone: "Telephone : " + facture.Client.telephone,
+            email: "Email : " + facture.Client.email,
         },
         invoice: {
             label: "Numero de Facture: ",
-            num: factures[0].idFacture,
+            num: facture.idFacture,
             invDate: null,
             invGenDate: null,
             headerBorder: false,
@@ -149,14 +145,14 @@ const generatePDF = () => {
             }),
             additionalRows: [{
                 col1: 'Total:',
-                col2: '100,000.50',
-                col3: 'ALL',
+                col2: total,
+                col3: '€',
                 style: {
                     fontSize: 14 //optional, default 12
                 }
             },
                 {
-                    col1: 'VAT:',
+                    col1: 'TVA:',
                     col2: '20',
                     col3: '%',
                     style: {
@@ -165,8 +161,8 @@ const generatePDF = () => {
                 },
                 {
                     col1: 'SubTotal:',
-                    col2: '116,199.90',
-                    col3: 'ALL',
+                    col2: totalTVA,
+                    col3: '€',
                     style: {
                         fontSize: 10 //optional, default 12
                     }
@@ -180,10 +176,8 @@ const generatePDF = () => {
         pageEnable: true,
         pageLabel: "Page ",
     };
-    console.log("table", props.invoice.table)
 
     const pdfObject = jsPDFInvoiceTemplate(props);
-    console.log(pdfObject)
 }
 
 
@@ -191,10 +185,151 @@ const generatePDF = () => {
 </script>
 
 <template>
-    <button class="button" @click="generatePDF">Générer PDF</button>
+    <!--<button class="button" @click="generatePDF">Générer PDF</button>-->
+    <LeftPanel/>
+    <div class="Page">
 
+        <div class="Titre">
+            <span>Gestions des factures</span>
+        </div>
+
+        <div class="Tableau">
+            <table>
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Date d'émission</th>
+                    <th>Payé</th>
+                    <th>Date de paiement</th>
+                    <th>Client</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="facture in factures" :key="id">
+                    <td>{{ facture.idFacture }}</td>
+                    <td>{{ facture.dateEmmission }}</td>
+                    <td>
+                        <div class="divImagePayee">
+                            <img class="imagePayee" src="../assets/payee.png" v-if="facture.payee == true">
+                            <img class="imagePayee" src="../assets/nonPayee.png" v-if="facture.payee == false">
+                        </div>
+                    </td>
+                    <td>{{ facture.datePaiement }}</td>
+                    <td>{{ facture.Client.nom }} {{ facture.Client.prenom }}</td>
+                    <td >
+                        <div class="action">
+                            <img class="ImageAction" src="../assets/poubelle.png" @click="deleteProduit(produit.idProduit)">
+                            <img class="ImageAction" src="../assets/generatePDF.png" @click="generatePDF(facture)">
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
 </template>
 
 <style scoped>
+.left-panel {
+    display: inline-block;
+    width: 20vw;
+    height: 100vh;
+    vertical-align: top;
+}
+
+.Page {
+    display: inline-block;
+    width: 79vw;
+    height: 100vh;
+}
+
+.Titre {
+    display: flex;
+    margin-top: 5vh;
+    margin-left: 5vh;
+}
+
+.Titre span {
+    color: #3f72b7;
+    font-size: 1.5rem;
+    text-decoration: underline;
+}
+.test {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
+
+.createButton {
+    display: flex;
+    position: absolute;
+    right: 4vh;
+    top: 4vh;
+    height: 5vh;
+    width: auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 94%;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
+    margin: 3%;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #739cd3;
+    font-weight: bold;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #c4d0e0;
+}
+
+tr:hover {
+    background-color: #a6c5f6;
+}
+
+td:nth-child(1),
+td:nth-child(2),
+td:nth-child(4),
+td:nth-child(6) {
+    text-align: center;
+}
+
+
+.TitreRightPanel span {
+    margin-left: 10px;
+    color: #3f72b7;
+    font-size: 1.5rem;
+    text-decoration: underline;
+}
+
+.ImageAction {
+    width: 30px;
+    height: 30px;
+}
+
+
+.divImagePayee {
+    display: flex;
+    justify-content: center;
+}
+.action {
+    display: flex;
+    justify-content: space-around;
+
+}
 
 </style>
