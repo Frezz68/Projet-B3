@@ -1,11 +1,214 @@
 <script setup>
+import {showCreateCommande, showPanel} from "@/utils";
+import LeftPanel from "@/components/LeftPanel.vue";
+import {reactive} from "vue";
+import Modal from "@/components/ModalCommande.vue";
+
+let produitsFacture = reactive([])
+let modifValue
+let isModif = true;
+const createCommande = () => {
+    showCreateCommande.value = !showCreateCommande.value
+}
+const init = () => {
+    showCreateCommande.value = false
+    produitsFacture.splice(0)
+}
+const addProduit = (produit) => {
+    const tmp = produitsFacture.find(produitFacture => produitFacture.id === produit.id)
+    if(tmp){
+        tmp.qte += produit.qte
+    }else {
+        produitsFacture.push(produit)
+    }
+}
+const afficherEdition = (id) => {
+    const tmp = produitsFacture.find(produitFacture => produitFacture.id === id)
+    if(tmp){
+        if(isModif){
+            isModif = !isModif
+            tmp.modif = !tmp.modif
+            modifValue = tmp.qte
+        }
+    }
+}
+const editProduit = (id) => {
+    const tmp = produitsFacture.find(produitFacture => produitFacture.id === id)
+    console.log(tmp)
+    if(tmp){
+        isModif = !isModif
+        tmp.qte = modifValue
+        tmp.modif = !tmp.modif
+    }
+}
+const deleteProduit = (id) => {
+    const tmp = produitsFacture.find(produitFacture => produitFacture.id === id)
+    if(tmp){
+        produitsFacture.splice(produitsFacture.indexOf(tmp), 1)
+    }
+}
+
+init()
 
 </script>
 
 <template>
+    <Modal v-if="showPanel" @sendProduit="addProduit"></Modal>
+    <LeftPanel/>
+    <div class="Page">
+        <div class="Titre">
+            <span>Création d'une commande</span>
+        </div>
+        <div class="createButton" v-if="showCreateCommande">
+            <img @click="showPanel = true" src="../assets/plus.png" alt="créer"/>
+        </div>
+        <button @click="createCommande" v-if="!showCreateCommande">Créer une commande</button>
 
+        <div class="Tableau" v-if="showCreateCommande">
+            <table>
+                <thead>
+                <tr>
+                    <th>Nom du Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix Unitaire</th>
+                    <th>Prix Total</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="produit in produitsFacture">
+                    <td>{{ produit.nom }}</td>
+                    <td v-if="!produit.modif">{{ produit.qte }}</td>
+                    <td v-else><input type="number" v-model="modifValue" @keyup.enter="editProduit(produit.id)" ></td>
+                    <td>{{ produit.prixUnitaire }}</td>
+                    <td>{{ produit.qte*produit.prixUnitaire }}</td>
+                    <td>
+                        <div class="action">
+                            <img class="ImageAction" src="../assets/poubelle.png" @click="deleteProduit(produit.id)">
+                            <img class="ImageAction" src="../assets/editer.png" @click="afficherEdition(produit.id)">
+                        </div>
+                    </td>
+
+                </tr>
+                <tr v-if="produitsFacture.length == 0">
+                    <td colspan="5">Aucun produit</td>
+                </tr>
+                </tbody>
+            </table>
+            <button v-if="showCreateCommande" @click="init()">Annuler</button>
+            <button v-if="showCreateCommande">Valider</button>
+        </div>
+    </div>
 </template>
 
 <style scoped>
+.left-panel {
+    display: inline-block;
+    width: 20vw;
+    height: 100vh;
+    vertical-align: top;
+}
 
+.Page {
+    display: inline-block;
+    width: 79vw;
+    height: 100vh;
+}
+
+.Titre {
+    display: flex;
+    margin-top: 5vh;
+    margin-left: 5vh;
+}
+
+.Titre span {
+    color: #3f72b7;
+    font-size: 1.5rem;
+    text-decoration: underline;
+}
+.test {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+}
+
+.createButton {
+    display: flex;
+    position: absolute;
+    right: 4vh;
+    top: 4vh;
+    height: 5vh;
+    width: auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 94%;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #333;
+    margin: 3%;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #739cd3;
+    font-weight: bold;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #c4d0e0;
+}
+
+tr:hover {
+    background-color: #a6c5f6;
+}
+
+td:nth-child(4),
+td:nth-child(5) {
+    text-align: right;
+}
+td:nth-child(1),
+td:nth-child(6) {
+    text-align: center;
+}
+
+
+td:nth-child(4):after {
+    content: " €";
+}
+
+.TitreRightPanel span {
+    margin-left: 10px;
+    color: #3f72b7;
+    font-size: 1.5rem;
+    text-decoration: underline;
+}
+
+.ImageProduit {
+    width: 100%;
+    height: 100%;
+}
+
+.ImageAction {
+    width: 30px;
+    height: 30px;
+}
+
+.imageTableau {
+    width: 50px;
+}
+
+.action {
+    display: flex;
+    justify-content: space-around;
+
+}
 </style>

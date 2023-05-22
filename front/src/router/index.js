@@ -42,7 +42,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/cammandes',
+      path: '/commandes',
       name: 'commandes',
       component: CommandesView,
       beforeEnter: (to, from) => {
