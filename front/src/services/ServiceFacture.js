@@ -9,11 +9,10 @@ export const ServiceFacture = {
     },
     addFacture: async (idClient, idProduit, quantite) => {
         const data = JSON.stringify({ idClient: idClient, idProduit: idProduit, quantite: quantite });
-        return ServiceXhr.callWithAuth('http://localhost:3000/api/v1/facture', data, "PUT");
+        return ServiceXhr.callWithAuth('http://localhost:3000/api/v1/facture', data, "POST");
     },
-    updateFacture: async (id, idClient, idProduit, quantite) => {
-        const data = JSON.stringify({ idClient: idClient, idProduit: idProduit, quantite: quantite });
-        return ServiceXhr.callWithAuth('http://localhost:3000/api/v1/facture/' + id, data, "POST");
+    updateFacture: async (id, data) => {
+        return ServiceXhr.callWithAuth('http://localhost:3000/api/v1/facture/' + id, data, "PUT");
     },
     deleteFacture: async (id) => {
         return ServiceXhr.callWithAuthNoBody('http://localhost:3000/api/v1/facture/' + id, "DELETE");

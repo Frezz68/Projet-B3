@@ -69,12 +69,14 @@ export async function createFacture (req :Request, res :Response)  {
 
 export async function updateFacture (req :Request, res :Response)  {
     const id = req.params.id;
+    console.log(req.body)
     const {payee, idUser} = req.body;
     const factureRepository = getRepository(Facture);
     const facture = await factureRepository.findOne({where: {idFacture: parseInt(id)}});
     if (!facture) {
         return res.status(404).json({error: 'Facture not found'});
     }
+    console.log(payee)
     if (payee !== undefined) facture.payee = payee;
     if (payee === true) facture.datePaiement = new Date();
     else facture.datePaiement = null;

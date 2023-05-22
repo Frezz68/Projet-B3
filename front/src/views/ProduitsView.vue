@@ -36,7 +36,7 @@ const editProduit = async (id) => {
 }
 
 const refreshData = () => {
-    produit= [];
+    produit.slice(0)
     getAllProduits()
 }
 
@@ -46,9 +46,12 @@ getAllProduits()
 
 <template>
   <div class="test" v-if="showPanel">
-      <RightPanel :produit="produit" :page="produit" @refresh="refreshData">
+      <RightPanel :produit="produit" @refresh="refreshData">
           <template v-slot:titre>
-              <div class="TitreRightPanel">
+              <div class="TitreRightPanel" v-if="produit.length != 0">
+                  <span>Modification d'un produit</span>
+              </div>
+              <div class="TitreRightPanel" v-else>
                   <span>Création d'un produit</span>
               </div>
           </template>

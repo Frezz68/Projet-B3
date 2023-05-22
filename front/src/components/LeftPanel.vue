@@ -56,7 +56,7 @@ const isActiveRoute = (path) => {
   margin: 3px;
   background-color: #ffffff;
   color: #3f72b7;
-  font-size: 2rem;
+  font-size: 3.5rem;
 }
 .left-panel ul {
   display: inline-block;
@@ -74,7 +74,7 @@ const isActiveRoute = (path) => {
   margin-top: 5px;
   border-radius: 10px;
   height: 100%;
-  font-size: 20px;
+  font-size: 25px;
   width: 90%;
 }
 
@@ -86,7 +86,7 @@ const isActiveRoute = (path) => {
   margin-top: 5px;
   border-radius: 7px;
   height: 100%;
-  font-size: 20px;
+  font-size: 25px;
   width: 90%;
   background-color: #3f72b7;
 }

@@ -29,15 +29,12 @@ const logIn = async () => {
         <div class="panneau">
             <div class="login-box">
 
-                <h2>Ha, te revoilà !</h2>
-                <h4>Nous sommes si heureux de te revoir !</h4>
-                <label for="user">Nom d'utilisateur </label><br>
-                <input v-model="login" type="text" id="user" required><br>
-                <label for="password">Mot de passe </label><br>
-                <input v-model="password" type="password" id="password" required><br>
-                    <form @submit.prevent="logIn()">
-                <button class="button">Log In</button>
-                </form>
+                <h2>Bienvenue sur notre CRM </h2>
+                <label for="user">Nom d'utilisateur </label>
+                <input v-model="login" type="text" id="user" required>
+                <label for="password">Mot de passe </label>
+                <input v-model="password" type="password" id="password" required>
+                <button class="button" @click="logIn()">Log In</button>
             </div>
         </div>
 
@@ -50,46 +47,42 @@ const logIn = async () => {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: #644d93;
+    background: #ffffff;
 }
 
 .panneau {
-    background-color: #303338;
-    color: #7a7b80;
+    background-color: #ffffff;
+    border: 4px solid #3f72b7;
+    color: #3f72b7;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    max-width: 50%;
-    width: 60%;
-}
-
-
-@media (max-width: 1000px) {
-    .login-box {
-        width: 100%;
-    }
+    box-shadow: 0px 0px 5px rgb(63, 114, 183);
+    width: 30%;
 }
 
 h2 {
     text-align: center;
-    color: white;
+    color: #3f72b7;
 }
 
-h4 {
-    text-align: center;
+.login-box {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
+
 .login-box input[type="text"],
 .login-box input[type="password"] {
-    width: 100%;
+    width: 50%;
     padding-top: 10px;
     padding-bottom: 10px;
     margin-bottom: 20px;
     color: white;
-    background-color: #1e1f22;
+    background-color: #a6c5f6;
     margin-top: 10px;
     border: none;
     border-radius: 3px;
-    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 1000px) {
@@ -103,25 +96,23 @@ h4 {
     color: red;
 }
 .button {
-    width: 100%;
+    width: 50%;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-color: #5765f2;
+    background-color: #3f72b7;
     color: white;
     border: none;
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.3s;
+    border: 2px solid #3f72b7;
 }
 
 .button:hover {
-    background-color: #4d64b9;
+    background-color: #FFFFFF;
+    color: #3f72b7;
+    border: 2px solid #3f72b7;
 }
 
-@media (max-width: 1000px) {
-    .button {
-        width: 99%;
-    }
-}
 
 </style>
