@@ -3,7 +3,7 @@ import { ServiceClients } from "../services/ServiceClient.js";
 import {reactive} from "vue";
 import {showPanel} from "@/utils";
 import LeftPanel from "@/components/LeftPanel.vue";
-import RightPanel from "@/components/RightPanelProduits.vue";
+import RightPanel from "@/components/RightPanel.vue";
 
 let clients = reactive([])
 
@@ -46,10 +46,10 @@ getAllClients()
 
 <template>
   <div class="test" v-if="showPanel">
-      <RightPanel :client="client" @refresh="refreshData">
+      <RightPanel :client="client" :page="client" @refresh="refreshData">
           <template v-slot:titre>
               <div class="TitreRightPanel">
-                  <span>Création d'un produit</span>
+                  <span>Création d'un client</span>
               </div>
           </template>
       </RightPanel>/
@@ -84,9 +84,12 @@ getAllClients()
             <td>{{ client.telephone }}</td>
             <td>{{ client.email }}</td>
             <td>{{ client.dateCreation }}</td>
-            <td class="action">
-                <img class="ImageDelete" src="../assets/poubelle.png" @click="deleteProduit(produit.idProduit)">
-                <img class="ImageDelete" src="../assets/editer.png" @click="editProduit(produit.idProduit)">
+            <td >
+                <div class="action">
+                    <img class="ImageAction" src="../assets/poubelle.png" @click="deleteProduit(produit.idProduit)">
+                    <img class="ImageAction" src="../assets/editer.png" @click="editProduit(produit.idProduit)">
+                </div>
+
             </td>
           </tr>
         </tbody>
@@ -187,16 +190,15 @@ td:nth-child(4):after {
     text-decoration: underline;
 }
 
-.ImageProduit {
-    width: 20%;
-    height: 20%;
-}
 
-.ImageDelete {
+.ImageAction {
     width: 30px;
     height: 30px;
 }
+
 .action {
+    display: flex;
+    justify-content: space-around;
 
 }
 </style>

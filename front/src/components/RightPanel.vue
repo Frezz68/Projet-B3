@@ -7,13 +7,25 @@ const route = useRoute()
 const emit = defineEmits(['refresh']);
 
 const props = defineProps({
-    produit: Object
+    produit: Object,
+    page: String
 })
+
 let nameProduit = ""
 let prixProduit = ""
 let quantiteProduit = ""
 let descriptionProduit = ""
 let imageProduit = ""
+
+let nomClient = ""
+let prenomClient = ""
+let emailClient = ""
+let adresseClient = ""
+let codePostalClient = ""
+let villeClient = ""
+let paysClient = ""
+let telephoneClient = ""
+
 
 if (props.produit) {
     nameProduit = props.produit.nom
@@ -75,7 +87,7 @@ const refresh = () => {
 <template>
     <div class="right-panel">
         <slot name="titre"></slot>
-        <div class="contenue" v-if="route = '/Produits' ">
+        <div class="contenue" v-if="route.path == '/produits'">
             <label for="nameProduit">Nom du produit : </label>
             <input v-model="nameProduit" type="text" id="nameProduit" required><br>
             <label for="prixProduit">Prix du produit : </label>
@@ -86,6 +98,24 @@ const refresh = () => {
             <input v-model="descriptionProduit" type="text" id="descriptionProduit" required><br>
             <label for="imageProduit">Insérer l'image du produit</label>
             <input v-model="imageProduit" type="text" id="imageProduit" required><br>
+        </div>
+        <div class="contenue" v-if="route.path == '/clients'">
+            <label for="nomClient">Nom : </label>
+            <input v-model="nomClient" type="text" id="nomClient" required><br>
+            <label for="prenomClient">Prenom : </label>
+            <input v-model="prenomClient" type="text" id="prenomClient" required><br>
+            <label for="emailClient">Email : </label>
+            <input v-model="emailClient" type="email" id="emailClient" required><br>
+            <label for="adresseClient">Adresse : </label>
+            <input v-model="adresseClient" type="text" id="adresseClient" required><br>
+            <label for="codePostalClient">Code postal :</label>
+            <input v-model="codePostalClient" type="number" id="codePostalClient" required><br>
+            <label for="villeClient">Ville :</label>
+            <input v-model="villeClient" type="text" id="villeClient" required><br>
+            <label for="paysClient">Pays :</label>
+            <input v-model="paysClient" type="text" id="paysClient" required><br>
+            <label for="telephoneClient">Telephone :</label>
+            <input v-model="telephoneClient" type="number" id="telephoneClient" required><br>
         </div>
         <button class="closeBtn" @click="showPanel = false">Fermer</button>
         <button class="SaveBtn" @click="save()">Save</button>
@@ -134,17 +164,18 @@ const refresh = () => {
 
 .contenue {
     margin-left: 10px;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 input[type="text"],
+input[type="email"],
 input[type="number"]{
-    width: 80%;
+    width: 90%;
     padding: 10px;
     margin-bottom: 20px;
     color: white;
     background-color: #c6dcff;
-    margin-top: 10px;
+    margin-top: 5px;
     border: none;
     border-radius: 3px;
 }
