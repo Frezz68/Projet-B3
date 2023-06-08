@@ -1,17 +1,31 @@
 <script setup>
 import {showCreateCommande, showPanel} from "@/utils";
 import LeftPanel from "@/components/LeftPanel.vue";
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 import Modal from "@/components/ModalCommande.vue";
+import {ServiceClients} from "@/services/ServiceClient";
+import {ServiceFacture} from "@/services/ServiceFacture";
+import {ServiceProduits} from "@/services/ServiceProduit";
 
+let lstClients = reactive([])
+let selectedIdClient = reactive([])
 let produitsFacture = reactive([])
-let modifValue
+let modifValue= ref()
 let isModif = true;
+let diffStock = ref(0)
 const createCommande = () => {
     showCreateCommande.value = !showCreateCommande.value
 }
-const init = () => {
+const init = async () => {
     showCreateCommande.value = false
+    const response = await ServiceClients.getAllClients();
+    if (response.status === 200) {
+        const result = await response.json()
+        lstClients.splice(0)
+        for (let client of result) {
+            lstClients.push(client)
+        }
+    }
     produitsFacture.splice(0)
 }
 const addProduit = (produit) => {
@@ -28,7 +42,8 @@ const afficherEdition = (id) => {
         if(isModif){
             isModif = !isModif
             tmp.modif = !tmp.modif
-            modifValue = tmp.qte
+            modifValue.value = tmp.qte
+            diffStock.value = tmp.qteMax - tmp.qte
         }
     }
 }
@@ -37,7 +52,9 @@ const editProduit = (id) => {
     console.log(tmp)
     if(tmp){
         isModif = !isModif
-        tmp.qte = modifValue
+        if(tmp.qteMax < modifValue.value){
+            tmp.qte = modifValue.value
+        }
         tmp.modif = !tmp.modif
     }
 }
@@ -47,13 +64,29 @@ const deleteProduit = (id) => {
         produitsFacture.splice(produitsFacture.indexOf(tmp), 1)
     }
 }
+const checkStock = (produit) => {
+    console.log(modifValue)
+    console.log(produit.qteMax)
+    if (modifValue.value > produit.qteMax){
+        modifValue.value = produit.qteMax;
+    }
+    diffStock.value = produit.qteMax - modifValue.value
+}
+
+const createFacture = async () => {
+    const response = await ServiceFacture.createFacture(selectedIdClient,produitsFacture,1)
+    console.log(response)
+    if (response.status === 201) {
+        init()
+    }
+}
 
 init()
 
 </script>
 
 <template>
-    <Modal v-if="showPanel" @sendProduit="addProduit"></Modal>
+    <Modal v-if="showPanel" :produits-in-facture="produitsFacture" @sendProduit="addProduit"></Modal>
     <LeftPanel/>
     <div class="Page">
         <div class="Titre">
@@ -63,7 +96,10 @@ init()
             <img @click="showPanel = true" src="../assets/plus.png" alt="créer"/>
         </div>
         <button @click="createCommande" v-if="!showCreateCommande">Créer une commande</button>
-
+        <br><label for="idClient" v-if="showCreateCommande">Client :</label>
+        <select id="idClient" v-if="showCreateCommande" v-model="selectedIdClient">
+            <option v-for="client in lstClients" :value="client.idClient">{{ client.nom }} {{client.prenom}}</option>
+        </select>
         <div class="Tableau" v-if="showCreateCommande">
             <table>
                 <thead>
@@ -79,7 +115,7 @@ init()
                 <tr v-for="produit in produitsFacture">
                     <td>{{ produit.nom }}</td>
                     <td v-if="!produit.modif">{{ produit.qte }}</td>
-                    <td v-else><input type="number" v-model="modifValue" @keyup.enter="editProduit(produit.id)" ></td>
+                    <td v-else><input type="number" v-model="modifValue" @input="checkStock(produit)" @keyup.enter="editProduit(produit.id)" ><span>En Stock: {{diffStock}}</span></td>
                     <td>{{ produit.prixUnitaire }}</td>
                     <td>{{ produit.qte*produit.prixUnitaire }}</td>
                     <td>
@@ -96,7 +132,7 @@ init()
                 </tbody>
             </table>
             <button v-if="showCreateCommande" @click="init()">Annuler</button>
-            <button v-if="showCreateCommande">Valider</button>
+            <button v-if="showCreateCommande" @click="createFacture()">Valider</button>
         </div>
     </div>
 </template>

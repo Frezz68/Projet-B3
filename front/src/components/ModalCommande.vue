@@ -2,19 +2,26 @@
 import {reactive, ref} from "vue";
 import { ServiceProduits } from "../services/ServiceProduit.js";
 import {showPanel} from "@/utils";
-
+let produitsExistants = reactive([])
 let produits = reactive([])
-let selectedIdProduit = reactive([])
+let selectedProduit = reactive([])
 let quantite = ref()
+let diffStock = ref(0)
 
 const emits = defineEmits(['sendProduit'])
+const props = defineProps({
+    produitsInFacture: Object
+})
 const getAllProduit = async () => {
     const response = await ServiceProduits.getAllProduits()
     if (response.status === 200) {
         const result = await response.json()
         produits.splice(0)
         for (let produit of result) {
-            produits.push(produit)
+            const filtredProduit = props.produitsInFacture.filter(produitInFacture => produitInFacture.id === produit.idProduit)
+            if (filtredProduit.length === 0){
+                produits.push(produit)
+            }
         }
     }
 }
@@ -23,23 +30,32 @@ const closePopUp = () => {
 }
 
 const addProduit = async () => {
-    if (selectedIdProduit){
-        const selectedProduit = produits.filter(produit => produit.idProduit === selectedIdProduit)
-        const ObjectProduit = {
-            id: selectedProduit[0].idProduit,
-            nom: selectedProduit[0].nom,
-            qte: quantite.value,
-            prixUnitaire: selectedProduit[0].prix,
-            modif: false,
-        }
-        console.log(selectedProduit)
-        showPanel.value = false
-        emits('sendProduit',ObjectProduit)
+    if(quantite.value > 0){
+      if (selectedProduit){
+          const filtredProduit = produits.filter(produit => produit.idProduit === selectedProduit.idProduit)
+          const ObjectProduit = {
+              id: filtredProduit[0].idProduit,
+              nom: filtredProduit[0].nom,
+              qte: quantite.value,
+              qteMax: filtredProduit[0].qteStock,
+              prixUnitaire: filtredProduit[0].prix,
+              modif: false,
+          }
+          console.log(filtredProduit)
+          showPanel.value = false
+          emits('sendProduit',ObjectProduit)
+      }
     }
+}
+const checkStock = () => {
+    if (quantite.value > selectedProduit.qteStock) {
+        quantite.value = selectedProduit.qteStock;
+    }
+    diffStock.value = selectedProduit.qteStock - quantite.value
 }
 
 getAllProduit()
-
+console.log(produits)
 </script>
 
 <template>
@@ -47,11 +63,13 @@ getAllProduit()
         <div class="vue-modal-inner">
             <div class="vue-modal-content">
                 <h2>Sélectionner un produit :</h2>
-               <select v-model="selectedIdProduit">
-                   <option v-for="produit in produits" :value="produit.idProduit">{{produit.nom}}</option>
+               <select v-model="selectedProduit">
+                   <option v-for="produit in produits" :value="produit">{{produit.nom}}</option>
                </select>
                 <label for="qte">Quantité :</label>
-                <input id="qte" type="number" v-model="quantite">
+                <input id="qte" type="number" v-model="quantite" @input="checkStock" :max="selectedProduit.qteStock">
+                <br>
+                <span v-if="selectedProduit.length != 0">En Stock: {{diffStock}}</span>
                 <button class="button" type="button" @click="addProduit">Envoyer</button>
                 <button class="button" @click="closePopUp">Annuler</button>
             </div>
