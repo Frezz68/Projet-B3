@@ -36,7 +36,7 @@ const editProduit = async (id) => {
 }
 
 const refreshData = () => {
-    produit.slice(0)
+    produits.slice(0)
     getAllProduits()
 }
 

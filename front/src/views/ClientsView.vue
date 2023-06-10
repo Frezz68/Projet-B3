@@ -36,7 +36,7 @@ const editClient = async (id) => {
 }
 
 const refreshData = () => {
-    client.slice(0)
+    clients.slice(0)
     getAllClients()
 }
 
