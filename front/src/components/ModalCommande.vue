@@ -63,13 +63,15 @@ getAllProduit()
         <div class="vue-modal-inner">
             <div class="vue-modal-content">
                 <h2>Sélectionner un produit :</h2>
-               <select v-model="selectedProduit">
+
+                <label for="qte">Produit :</label> <br/>
+                <select v-model="selectedProduit">
                    <option v-for="produit in produits" :value="produit">{{produit.nom}}</option>
-               </select>
-                <label for="qte">Quantité :</label>
-                <input id="qte" type="number" v-model="quantite" @input="checkStock" :max="selectedProduit.qteStock">
+                </select><br/>
+                <label for="qte">Quantité :</label><br/>
+                <input id="qte" type="number" v-model="quantite" @input="checkStock" :max="selectedProduit.qteStock" min="0">
                 <br>
-                <span v-if="selectedProduit.length != 0">En Stock: {{diffStock}}</span>
+                <span v-if="selectedProduit.length != 0">En Stock: {{diffStock}}</span> <br>
                 <button class="button" type="button" @click="addProduit">Envoyer</button>
                 <button class="button" @click="closePopUp">Annuler</button>
             </div>
@@ -104,73 +106,59 @@ getAllProduit()
     width: 40%;
 }
 
+h2 {
+    margin-bottom: 20px;
+    color: #3f72b7;
+}
+
 .vue-modal-content {
-    background-color: #303338;
-    color: #7a7b80;
+    background-color: #ffffff;
+    color: #3f72b7;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 5px rgb(63, 114, 183);
     text-align: center;
 }
 
-h1 {
-    text-align: center;
-    color: white;
+.vue-modal-content select {
+    width: 50%;
+    height: 5vh;
+    border: 2px solid #3f72b7;
+    color: #3f72b7;
+    font-size: 1rem;
 }
 
-@media (max-width: 1000px) {
-    .login-box {
-        width: 100%;
-    }
-}
-
-.add-user-box {
-    margin-top: 20px;
-    margin-left: 5%;
-    text-align: left;
-}
-
-.add-user-box input[type="text"] {
-    width: 90%;
-    padding: 10px;
+.vue-modal-content input[type="number"] {
+    width: 50%;
+    height: 5vh;
+    padding-top: 10px;
+    padding-bottom: 10px;
     margin-bottom: 20px;
     color: white;
-    background-color: #1e1f22;
+    background-color: #a6c5f6;
     margin-top: 10px;
     border: none;
     border-radius: 3px;
-    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 1000px) {
-    .login-box input[type="text"],
-    .login-box input[type="password"] {
-        width: 95%;
-    }
-}
-.add-user-box label::after {
-    content: "*";
-    color: red;
-}
+
 .button {
-    width: 40%;
+    width: 30%;
     padding: 10px;
     margin: 20px;
-    background-color: #5765f2;
+    background-color: #3f72b7;
     color: white;
     border: none;
     border-radius: 3px;
     cursor: pointer;
     transition: background-color 0.3s;
+    border: 2px solid #3f72b7;
 }
 
 .button:hover {
-    background-color: #4d64b9;
+    background-color: #FFFFFF;
+    color: #3f72b7;
+    border: 2px solid #3f72b7;
 }
 
-@media (max-width: 1200px) {
-    .button {
-        width: 70%;
-    }
-}
 </style>
