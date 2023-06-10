@@ -7,9 +7,9 @@ export const ServiceFacture = {
     getFactureById: async (id) => {
         return ServiceXhr.callWithAuthNoBody('http://localhost:3000/api/v1/facture/' + id, "GET");
     },
-    addFacture: async (idClient, idProduit, quantite) => {
-        const data = JSON.stringify({ idClient: idClient, idProduit: idProduit, quantite: quantite });
-        return ServiceXhr.callWithAuth('http://localhost:3000/api/v1/facture', data, "PUT");
+    createFacture: async (idClient, refProduits, idUser) => {
+        const data = JSON.stringify({ idClient: idClient, refProduits: refProduits, idUser: idUser });
+        return ServiceXhr.callWithAuth('http://localhost:3000/api/v1/facture/', data, "POST");
     },
     updateFacture: async (id, idClient, idProduit, quantite) => {
         const data = JSON.stringify({ idClient: idClient, idProduit: idProduit, quantite: quantite });
