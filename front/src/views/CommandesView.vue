@@ -5,7 +5,6 @@ import {reactive, ref} from "vue";
 import Modal from "@/components/ModalCommande.vue";
 import {ServiceClients} from "@/services/ServiceClient";
 import {ServiceFacture} from "@/services/ServiceFacture";
-import {ServiceProduits} from "@/services/ServiceProduit";
 
 let lstClients = reactive([])
 let selectedIdClient = reactive([])
@@ -92,14 +91,19 @@ init()
         <div class="Titre">
             <span>Création d'une commande</span>
         </div>
+        <div class="firstCreateButton" v-if="!showCreateCommande">
+                <img @click="createCommande" class="imgCreateCommande" v-if="!showCreateCommande" src="../assets/panier.png" alt="créer"/>
+        </div>
         <div class="createButton" v-if="showCreateCommande">
             <img @click="showPanel = true" src="../assets/plus.png" alt="créer"/>
         </div>
-        <button @click="createCommande" v-if="!showCreateCommande">Créer une commande</button>
-        <br><label for="idClient" v-if="showCreateCommande">Client :</label>
-        <select id="idClient" v-if="showCreateCommande" v-model="selectedIdClient">
-            <option v-for="client in lstClients" :value="client.idClient">{{ client.nom }} {{client.prenom}}</option>
-        </select>
+        <div  class="selectClient">
+            <label for="idClient" v-if="showCreateCommande">Client :</label>
+            <select id="idClient" v-if="showCreateCommande" v-model="selectedIdClient">
+                <option v-for="client in lstClients" :value="client.idClient">{{ client.nom }} {{client.prenom}}</option>
+            </select>
+        </div>
+
         <div class="Tableau" v-if="showCreateCommande">
             <table>
                 <thead>
@@ -131,8 +135,8 @@ init()
                 </tr>
                 </tbody>
             </table>
-            <button v-if="showCreateCommande" @click="init()">Annuler</button>
-            <button v-if="showCreateCommande" @click="createFacture()">Valider</button>
+            <button v-if="showCreateCommande" @click="init()" class="closeBtn">Annuler</button>
+            <button v-if="showCreateCommande" @click="createFacture()" class="SaveBtn">Valider</button>
         </div>
     </div>
 </template>
@@ -247,4 +251,62 @@ td:nth-child(4):after {
     justify-content: space-around;
 
 }
+
+.firstCreateButton {
+    display: flex;
+    height: 100%;
+    width: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+.imgCreateCommande {
+    width:  auto;
+    height: 25%;
+    display: flex;
+}
+
+.closeBtn {
+    position: absolute;
+    right: 8vw;
+    bottom: 0;
+    height: 5vh;
+    width: 7vw;
+    margin: 5px;
+    border: 2px solid #3f72b7;
+    background: #ffffff;
+    color: #3f72b7;
+}
+
+.SaveBtn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 5px;
+    background: #3f72b7;
+    color: #ffffff;
+    border: none;
+    height: 5vh;
+    margin: 5px;
+    width: 7vw;
+}
+
+.selectClient {
+    margin-left: 3%;
+    margin-top: 3vh;
+    width: auto;
+    height: 5vh;
+    color: #3f72b7;
+}
+
+.selectClient select {
+    margin-left: 10px;
+    width: 20vw;
+    height: 4vh;
+    border: 2px solid #3f72b7;
+    color: #3f72b7;
+    font-size: 1rem;
+    padding-left: 5px;
+}
+
 </style>

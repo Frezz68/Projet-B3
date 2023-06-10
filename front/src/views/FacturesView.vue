@@ -19,8 +19,12 @@ const getAllFactures = async () => {
         const result = await response.json()
         factures.splice(0)
         for (let facture of result) {
+            console.log('datePaiement', facture.datePaiement)
             facture.dateEmmission = new Date(facture.dateEmmission).toLocaleDateString()
-            facture.datePaiement = new Date(facture.datePaiement).toLocaleDateString()
+            if (facture.datePaiement != null)
+            {
+                facture.datePaiement = new Date(facture.datePaiement).toLocaleDateString()
+            }
             factures.push(facture)
         }
         console.log("factures", factures)
@@ -145,7 +149,7 @@ const generatePDF = (facture) => {
             }),
             additionalRows: [{
                 col1: 'Total:',
-                col2: total,
+                col2: totalTVA,
                 col3: '€',
                 style: {
                     fontSize: 14 //optional, default 12
@@ -160,8 +164,8 @@ const generatePDF = (facture) => {
                     }
                 },
                 {
-                    col1: 'SubTotal:',
-                    col2: totalTVA,
+                    col1: 'Total sans TVA:',
+                    col2: total,
                     col3: '€',
                     style: {
                         fontSize: 10 //optional, default 12
@@ -246,7 +250,7 @@ const generatePDF = (facture) => {
                             <img class="imagePayee" src="../assets/nonPayee.png" v-if="facture.payee == false">
                         </div>
                     </td>
-                    <td>{{ facture.datePaiement }}</td>
+                    <td>{{ facture.datePaiement ? facture.datePaiement : '/' }}</td>
                     <td>{{ facture.Client.nom }} {{ facture.Client.prenom }}</td>
                     <td >
                         <div class="action">
