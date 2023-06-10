@@ -266,6 +266,7 @@ td:nth-child(4):after {
     width:  auto;
     height: 25%;
     display: flex;
+    cursor: pointer;
 }
 
 .closeBtn {
