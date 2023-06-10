@@ -36,7 +36,7 @@ const editClient = async (id) => {
 }
 
 const refreshData = () => {
-    client= [];
+    client.slice(0)
     getAllClients()
 }
 
@@ -46,9 +46,12 @@ getAllClients()
 
 <template>
   <div class="test" v-if="showPanel">
-      <RightPanel :client="client" :page="client" @refresh="refreshData">
+      <RightPanel :client="client" @refresh="refreshData">
           <template v-slot:titre>
-              <div class="TitreRightPanel">
+              <div class="TitreRightPanel" v-if="client.length != 0">
+                  <span>Modification d'un client</span>
+              </div>
+              <div class="TitreRightPanel" v-else>
                   <span>Création d'un client</span>
               </div>
           </template>
@@ -73,7 +76,6 @@ getAllClients()
             <th>Adresse</th>
             <th>Téléphone</th>
             <th>Email</th>
-            <th>Date création</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -83,11 +85,10 @@ getAllClients()
             <td>{{ client.adresse }},{{ client.codePostal }} {{ client.ville }} {{ client.pays }}</td>
             <td>{{ client.telephone }}</td>
             <td>{{ client.email }}</td>
-            <td>{{ client.dateCreation }}</td>
             <td >
                 <div class="action">
-                    <img class="ImageAction" src="../assets/poubelle.png" @click="deleteProduit(produit.idProduit)">
-                    <img class="ImageAction" src="../assets/editer.png" @click="editProduit(produit.idProduit)">
+                    <img class="ImageAction" src="../assets/poubelle.png" @click="deleteClient(client.idClient)">
+                    <img class="ImageAction" src="../assets/editer.png" @click="editClient(client.idClient)">
                 </div>
 
             </td>
@@ -169,19 +170,11 @@ tr:hover {
   background-color: #a6c5f6;
 }
 
-td:nth-child(4),
-td:nth-child(5) {
-  text-align: right;
-}
 td:nth-child(1),
 td:nth-child(6) {
     text-align: center;
 }
 
-
-td:nth-child(4):after {
-  content: " €";
-}
 
 .TitreRightPanel span {
     margin-left: 10px;

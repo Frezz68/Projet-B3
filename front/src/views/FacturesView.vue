@@ -3,8 +3,13 @@ import jsPDFInvoiceTemplate from "jspdf-invoice-template";
 import {reactive} from "vue";
 import { ServiceFacture } from "../services/ServiceFacture.js";
 import LeftPanel from "@/components/LeftPanel.vue";
+import {ServiceProduits} from "@/services/ServiceProduit";
+import {showPanel} from "@/utils";
+import RightPanel from "@/components/RightPanel.vue";
+import {ServiceClients} from "@/services/ServiceClient";
 
 let factures = reactive([])
+let facture = reactive([])
 
 const getAllFactures = async () => {
     const response = await ServiceFacture.getAllFactures()
@@ -22,37 +27,34 @@ const getAllFactures = async () => {
     }
 }
 
+const editFactures = async (id) => {
+    const response = await ServiceFacture.getFactureById(id)
+    if (response.status === 200) {
+        const result = await response.json()
+        facture = result
+        console.log("facture", facture)
+        showPanel.value = true
+    }
+}
+
+const deleteFacture = async (id) => {
+    const response = await ServiceFacture.deleteFacture(id)
+    if (response.status === 200) {
+        getAllFactures()
+    }
+}
+
+const refreshData = () => {
+    console.log("refreshData")
+    factures.slice(0)
+    getAllFactures()
+}
+
 getAllFactures()
 const generatePDF = (facture) => {
-    const produitsFacture = [
-        {
-            id : 1,
-            nom : "Produit 1",
-            description : "Description 1",
-            prix : 10,
-            quantite : 2,
-            total : 20
-        },
-        {
-            id : 2,
-            nom : "Produit 1",
-            description : "Description 1",
-            prix : 20,
-            quantite : 2,
-            total : 40
-        },
-        {
-            id : 3,
-            nom : "Produit 3",
-            description : "Description 3",
-            prix : 30,
-            quantite : 3,
-            total : 60
-        }
-    ]
     let total = 0
-    for (let produit of produitsFacture) {
-        total = total + (produit.quantite * produit.prix)
+    for (let produit of facture.produits) {
+        total = total + (produit.quantite * produit.produit.prix)
     }
     let totalTVA = total * 1.2
     total = total.toString()
@@ -92,8 +94,8 @@ const generatePDF = (facture) => {
             website: "https://www.ynov.com/campus/nantes/",
         },
         contact: {
-            label: "Facture de:",
-            name: "Nom : " + facture.Client.nom + " " + facture.Client.prenom,
+            label: "Facture de: ",
+            name: facture.Client.nom + " " + facture.Client.prenom,
             address: "Adresse : " + facture.Client.adresse + " " + facture.Client.codePostal + " " + facture.Client.ville,
             phone: "Telephone : " + facture.Client.telephone,
             email: "Email : " + facture.Client.email,
@@ -101,7 +103,7 @@ const generatePDF = (facture) => {
         invoice: {
             label: "Numero de Facture: ",
             num: facture.idFacture,
-            invDate: null,
+            invDate: "Date d'émission : " + new Date(facture.dateEmmission).toLocaleDateString(),
             invGenDate: null,
             headerBorder: false,
             tableBodyBorder: false,
@@ -131,16 +133,14 @@ const generatePDF = (facture) => {
                 { title: "Quantité", value: "quantite"},
                 { title: "Total", value: "total"}
             ],
-            table: Array.from(Array(produitsFacture.length), (item, index)=> {
-                console.log("index", index)
-                console.log("produitsFacture[index]", produitsFacture[index])
+            table: Array.from(Array(facture.produits.length), (item, index)=> {
                 return  [
-                    produitsFacture[index].id,
-                    produitsFacture[index].nom,
-                    produitsFacture[index].description,
-                    produitsFacture[index].prix,
-                    produitsFacture[index].quantite,
-                    produitsFacture[index].total
+                    facture.produits[index].produit.idProduit,
+                    facture.produits[index].produit.nom,
+                    facture.produits[index].produit.description,
+                    facture.produits[index].produit.prix,
+                    facture.produits[index].quantite,
+                    facture.produits[index].quantite * facture.produits[index].produit.prix
                 ];
             }),
             additionalRows: [{
@@ -166,9 +166,31 @@ const generatePDF = (facture) => {
                     style: {
                         fontSize: 10 //optional, default 12
                     }
-                }],
-            invDescLabel: "Invoice Note",
-            invDesc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.",
+                },
+                {
+                    col1: '',
+                    col2: '',
+                    style: {
+                        fontSize: 14
+                    }
+                },
+                {
+                    col1: 'Status:',
+                    col2: facture.payee ? 'Payé' : 'Non payé',
+                    style: {
+                        fontSize: 20 //optional, default 12
+                    }
+                },
+                {
+                    col1: facture.payee ? 'Date de paiement' : '',
+                    col2: facture.payee ? facture.datePaiement : '',
+                    style: {
+                        fontSize: 8 //optional, default 12
+                    }
+                }
+                ],
+            invDescLabel: "Remarques:",
+            invDesc: "Merci d'avoir choisi notre entreprise. Nous vous souhaitons une bonne journée.",
         },
         footer: {
             text: "The invoice is created on a computer and is valid without the signature and stamp.",
@@ -185,6 +207,15 @@ const generatePDF = (facture) => {
 </script>
 
 <template>
+    <div class="test" v-if="showPanel">
+        <RightPanel :facture="facture" @refresh="refreshData">
+            <template v-slot:titre>
+                <div class="TitreRightPanel">
+                    <span>Modification d'un client</span>
+                </div>
+            </template>
+        </RightPanel>/
+    </div>
     <!--<button class="button" @click="generatePDF">Générer PDF</button>-->
     <LeftPanel/>
     <div class="Page">
@@ -197,7 +228,7 @@ const generatePDF = (facture) => {
             <table>
                 <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>Numéro Facture</th>
                     <th>Date d'émission</th>
                     <th>Payé</th>
                     <th>Date de paiement</th>
@@ -219,8 +250,9 @@ const generatePDF = (facture) => {
                     <td>{{ facture.Client.nom }} {{ facture.Client.prenom }}</td>
                     <td >
                         <div class="action">
-                            <img class="ImageAction" src="../assets/poubelle.png" @click="deleteProduit(produit.idProduit)">
                             <img class="ImageAction" src="../assets/generatePDF.png" @click="generatePDF(facture)">
+                            <img class="ImageAction" src="../assets/editer.png" @click="editFactures(facture.idFacture)">
+                            <img class="ImageAction" src="../assets/poubelle.png" @click="deleteFacture(facture.idFacture)" v-if="!facture.payee">
                         </div>
                     </td>
                 </tr>

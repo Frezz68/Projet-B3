@@ -2,44 +2,44 @@
 import { useRoute } from 'vue-router'
 import {showPanel} from "@/utils"
 import {ServiceProduits} from "@/services/ServiceProduit";
+import { ServiceClients } from "../services/ServiceClient.js";
+import { ServiceFacture } from "../services/ServiceFacture.js";
 const route = useRoute()
 
 const emit = defineEmits(['refresh']);
 
 const props = defineProps({
+    client: Object,
     produit: Object,
-    page: String
+    facture: Object
 })
 
-let nameProduit = ""
-let prixProduit = ""
-let quantiteProduit = ""
-let descriptionProduit = ""
-let imageProduit = ""
+let nameProduit = props.produit ? props.produit.nom :""
+let prixProduit = props.produit ? props.produit.prix :""
+let quantiteProduit = props.produit ? props.produit.qteStock :""
+let descriptionProduit = props.produit ? props.produit.description :""
+let imageProduit = props.produit ? props.produit.pathToImage :""
 
-let nomClient = ""
-let prenomClient = ""
-let emailClient = ""
-let adresseClient = ""
-let codePostalClient = ""
-let villeClient = ""
-let paysClient = ""
-let telephoneClient = ""
+let nomClient = props.client ? props.client.nom : ""
+let prenomClient = props.client ? props.client.prenom : ""
+let emailClient = props.client ? props.client.email :""
+let adresseClient = props.client ? props.client.adresse :""
+let codePostalClient = props.client ? props.client.codePostal :""
+let villeClient = props.client ? props.client.ville :""
+let paysClient = props.client ? props.client.pays :""
+let telephoneClient = props.client ? props.client.telephone :""
 
+let idFacture = props.facture ? props.facture.idFacture :""
+let dateEmission = props.facture ? new Date(props.facture.dateEmmission).toISOString().slice(0, 10) :""
+let payee = props.facture ? props.facture.payee :""
+let nomPrenomClient = props.facture ? props.facture.Client.nom + props.facture.Client.prenom :""
 
-if (props.produit) {
-    nameProduit = props.produit.nom
-    prixProduit = props.produit.prix
-    quantiteProduit = props.produit.qteStock
-    descriptionProduit = props.produit.description
-    imageProduit = props.produit.pathToImage
-}
 
 const save = async () => {
     console.log("save", route.path)
     switch (route.path) {
         case "/produits":
-            const data = JSON.stringify({
+            const dataProduit = JSON.stringify({
                 nom: nameProduit,
                 prix: prixProduit,
                 description: descriptionProduit,
@@ -47,12 +47,12 @@ const save = async () => {
                 quantite: quantiteProduit
             });
             if (props.produit.idProduit ) {
-                const response = await ServiceProduits.updateProduit(props.produit.idProduit, data)
+                const response = await ServiceProduits.updateProduit(props.produit.idProduit, dataProduit)
                 if (response.status === 200) {
                     showPanel.value = false
                 }
             }else {
-                const response = await ServiceProduits.addProduit(data)
+                const response = await ServiceProduits.addProduit(dataProduit)
                 if (response.status === 201) {
                     showPanel.value = false
                 }
@@ -64,12 +64,42 @@ const save = async () => {
             showPanel.value = !showPanel
             break;
         case "/clients":
-            console.log("clients")
-            showPanel.value = !showPanel
+            const dataClients = JSON.stringify({
+                nom: nomClient,
+                prenom: prenomClient,
+                email: emailClient,
+                adresse: adresseClient,
+                codePostal: codePostalClient,
+                ville: villeClient,
+                pays: paysClient,
+                telephone: telephoneClient,
+                dateCreation: new Date()
+            });
+            if (props.client.idClient ) {
+                const response = await ServiceClients.updateClient(props.client.idClient, dataClients)
+                if (response.status === 200) {
+                    showPanel.value = false
+                }
+            }else {
+                const response = await ServiceClients.addClient(dataClients)
+                if (response.status === 201) {
+                    showPanel.value = false
+                }
+            }
+            refresh();
             break;
         case "/factures":
-            console.log("factures")
-            showPanel.value = !showPanel
+            const dataFacture = JSON.stringify({
+                payee: payee
+            });
+            console.log(dataFacture)
+            if (props.facture.idFacture ) {
+                const response = await ServiceFacture.updateFacture(props.facture.idFacture, dataFacture)
+                if (response.status === 200) {
+                    showPanel.value = false
+                }
+            }
+            refresh();
             break;
         default:
             console.log("error")
@@ -116,6 +146,16 @@ const refresh = () => {
             <input v-model="paysClient" type="text" id="paysClient" required><br>
             <label for="telephoneClient">Telephone :</label>
             <input v-model="telephoneClient" type="number" id="telephoneClient" required><br>
+        </div>
+        <div class="contenue" v-if="route.path == '/factures'">
+            <label for="idFacture">Numéro facture : </label>
+            <input v-model="idFacture" type="number" id="idFacture" required disabled><br>
+            <label for="dateEmission">Date d'émission : </label>
+            <input v-model="dateEmission" type="date" id="dateEmission" required disabled><br>
+            <label for="payee">Payé : </label>
+            <input v-model="payee" type="checkbox" id="payee" required :disabled="payee"><br>
+            <label for="nomPrenomClient">Client :</label>
+            <input v-model="nomPrenomClient" type="text" id="nomPrenomClient" required disabled><br>
         </div>
         <button class="closeBtn" @click="showPanel = false">Fermer</button>
         <button class="SaveBtn" @click="save()">Save</button>
@@ -169,6 +209,8 @@ const refresh = () => {
 
 input[type="text"],
 input[type="email"],
+input[type="date"],
+input[type="checkbox"],
 input[type="number"]{
     width: 90%;
     padding: 10px;

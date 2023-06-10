@@ -7,7 +7,7 @@ export const ServiceUtilisateur = {
     },
     register: async (login, password) => {
         const data = JSON.stringify({login: login, password: password});
-        return ServiceXhr.callWithoutAuth("http://localhost:3000/api/v1/user/register", data, "PUT");
+        return ServiceXhr.callWithoutAuth("http://localhost:3000/api/v1/user/register", data, "POST");
     },
     getAllUsers: async () => {
         return ServiceXhr.callWithAuthNoBody("http://localhost:3000/api/v1/user", "GET");
