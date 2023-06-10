@@ -214,17 +214,23 @@ tr:hover {
     background-color: #a6c5f6;
 }
 
+
+td:nth-child(1),
+td:nth-child(6){
+    text-align: center;
+}
+
+td:nth-child(2),
+td:nth-child(3),
 td:nth-child(4),
 td:nth-child(5) {
     text-align: right;
 }
-td:nth-child(1),
-td:nth-child(6) {
-    text-align: center;
-}
 
 
-td:nth-child(4):after {
+td:nth-child(4):after,
+td:nth-child(3):after,
+td:nth-child(6):after{
     content: " €";
 }
 
