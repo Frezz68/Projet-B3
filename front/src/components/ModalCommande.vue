@@ -72,8 +72,9 @@ getAllProduit()
                 <input id="qte" type="number" v-model="quantite" @input="checkStock" :max="selectedProduit.qteStock" min="0">
                 <br>
                 <span v-if="selectedProduit.length != 0">En Stock: {{diffStock}}</span> <br>
-                <button class="button" type="button" @click="addProduit">Envoyer</button>
                 <button class="button" @click="closePopUp">Annuler</button>
+                <button class="button" type="button" @click="addProduit">Envoyer</button>
+
             </div>
         </div>
     </div>

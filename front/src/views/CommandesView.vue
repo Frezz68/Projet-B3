@@ -80,6 +80,7 @@ const createFacture = async () => {
     const response = await ServiceFacture.createFacture(selectedIdClient.value,produitsFacture,1)
     if (response.status === 201) {
         init()
+        alert("Votre commande a bien été créée, vous pouvez la retrouver dans l'onget facture")
     }
 }
 

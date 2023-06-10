@@ -28,6 +28,7 @@ let codePostalClient = props.client ? props.client.codePostal :""
 let villeClient = props.client ? props.client.ville :""
 let paysClient = props.client ? props.client.pays :""
 let telephoneClient = props.client ? props.client.telephone :""
+let dateCreationClient = props.client ? props.client.dateCreation :new Date()
 
 let idFacture = props.facture ? props.facture.idFacture :""
 let dateEmission = props.facture ? new Date(props.facture.dateEmmission).toISOString().slice(0, 10) :""
@@ -71,7 +72,7 @@ const save = async () => {
                 ville: villeClient,
                 pays: paysClient,
                 telephone: telephoneClient,
-                dateCreation: new Date()
+                dateCreation: dateCreationClient
             });
             if (props.client.idClient ) {
                 const response = await ServiceClients.updateClient(props.client.idClient, dataClients)
