@@ -48,22 +48,22 @@ export async function createFacture (req :Request, res :Response)  {
     const {idClient, refProduits , idUser} = req.body;
     if( !idClient || !refProduits || !idUser) return res.status(400).json({error: 'Missing idClient or idProduit or idUser'});
     const factureRepository = getRepository(Facture);
-    const produitRepository = getRepository(Produit);
     const factureProduitRepository = getRepository(FactureProduit);
+    const produitRepository = getRepository(Produit);
 
     const currentDate = new Date();
     const newFacture = factureRepository.create({Client: idClient, dateEmmission: currentDate, lastModif:currentDate, creeePar: idUser, modifieePar: idUser});
     await factureRepository.save(newFacture);
-    const produits = await produitRepository.findByIds(refProduits);
-    const factureProduits = produits.map(produit => {
-        const quantite = refProduits.find((item: ProduitRef) => item.id === produit.idProduit);
-        const factureProduit = new FactureProduit();
-        factureProduit.facture = newFacture;
-        factureProduit.produit = produit;
-        factureProduit.quantite = quantite;
-        return factureProduit;
-    });
-    await factureProduitRepository.save(factureProduits);
+    for (const produit of refProduits) {
+        const newFactureProduit = factureProduitRepository.create({facture: newFacture, produitId: produit.id, quantite: produit.qte});
+        await factureProduitRepository.save(newFactureProduit);
+        const produitToUpdate = await produitRepository.findOne({where: {idProduit: produit.id}});
+        if (!produitToUpdate) {
+            return res.status(404).json({error: 'Produit not found'});
+        }
+        produitToUpdate.qteStock = produitToUpdate.qteStock - produit.qte;
+        await produitRepository.save(produitToUpdate);
+    }
     res.status(201).json({message: 'Facture created'});
 }
 
