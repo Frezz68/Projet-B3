@@ -7,12 +7,10 @@ let password;
 
 const router = useRouter();
 const logIn = async () => {
-    console.log("login", login)
     if(login.trim() !== "" && password.trim() !== "") {
         ServiceUtilisateur.logIn(login, password)
             .then(async (response) => {
                 const result = await response.json();
-                console.log(result);
                 if(response.status === 200) {
                     localStorage.setItem("token", result.token)
                     await router.push({ path: '/home' })

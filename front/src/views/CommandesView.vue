@@ -8,7 +8,7 @@ import {ServiceFacture} from "@/services/ServiceFacture";
 import {ServiceProduits} from "@/services/ServiceProduit";
 
 let lstClients = reactive([])
-let selectedIdClient = reactive([])
+let selectedIdClient = ref()
 let produitsFacture = reactive([])
 let modifValue= ref()
 let isModif = true;
@@ -49,7 +49,6 @@ const afficherEdition = (id) => {
 }
 const editProduit = (id) => {
     const tmp = produitsFacture.find(produitFacture => produitFacture.id === id)
-    console.log(tmp)
     if(tmp){
         isModif = !isModif
         if(tmp.qteMax < modifValue.value){
@@ -65,8 +64,6 @@ const deleteProduit = (id) => {
     }
 }
 const checkStock = (produit) => {
-    console.log(modifValue)
-    console.log(produit.qteMax)
     if (modifValue.value > produit.qteMax){
         modifValue.value = produit.qteMax;
     }
@@ -74,15 +71,20 @@ const checkStock = (produit) => {
 }
 
 const createFacture = async () => {
-    const response = await ServiceFacture.createFacture(selectedIdClient,produitsFacture,1)
-    console.log(response)
+    if(produitsFacture.length === 0){
+        alert("Veuillez ajouter des produits à la commande")
+        return
+    }else if(selectedIdClient === undefined){
+        alert("Veuillez sélectionner un client")
+        return
+    }
+    const response = await ServiceFacture.createFacture(selectedIdClient.value,produitsFacture,1)
     if (response.status === 201) {
         init()
     }
 }
 
 init()
-
 </script>
 
 <template>
@@ -92,7 +94,7 @@ init()
         <div class="Titre">
             <span>Création d'une commande</span>
         </div>
-        <div class="createButton" v-if="showCreateCommande">
+        <div class="createButton" v-if="showCreateCommande && selectedIdClient != undefined">
             <img @click="showPanel = true" src="../assets/plus.png" alt="créer"/>
         </div>
         <button @click="createCommande" v-if="!showCreateCommande">Créer une commande</button>
@@ -100,7 +102,7 @@ init()
         <select id="idClient" v-if="showCreateCommande" v-model="selectedIdClient">
             <option v-for="client in lstClients" :value="client.idClient">{{ client.nom }} {{client.prenom}}</option>
         </select>
-        <div class="Tableau" v-if="showCreateCommande">
+        <div class="Tableau" v-if="showCreateCommande && selectedIdClient != undefined">
             <table>
                 <thead>
                 <tr>
