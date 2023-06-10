@@ -20,7 +20,9 @@ const getAllProduit = async () => {
         for (let produit of result) {
             const filtredProduit = props.produitsInFacture.filter(produitInFacture => produitInFacture.id === produit.idProduit)
             if (filtredProduit.length === 0){
-                produits.push(produit)
+                if(produit.qteStock > 0){
+                    produits.push(produit)
+                }
             }
         }
     }
@@ -41,7 +43,6 @@ const addProduit = async () => {
               prixUnitaire: filtredProduit[0].prix,
               modif: false,
           }
-          console.log(filtredProduit)
           showPanel.value = false
           emits('sendProduit',ObjectProduit)
       }
@@ -55,7 +56,6 @@ const checkStock = () => {
 }
 
 getAllProduit()
-console.log(produits)
 </script>
 
 <template>

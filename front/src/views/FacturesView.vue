@@ -13,8 +13,6 @@ let facture = reactive([])
 
 const getAllFactures = async () => {
     const response = await ServiceFacture.getAllFactures()
-
-    console.log("response", response)
     if (response.status === 200) {
         const result = await response.json()
         factures.splice(0)
@@ -23,7 +21,6 @@ const getAllFactures = async () => {
             facture.datePaiement = new Date(facture.datePaiement).toLocaleDateString()
             factures.push(facture)
         }
-        console.log("factures", factures)
     }
 }
 
@@ -32,7 +29,6 @@ const editFactures = async (id) => {
     if (response.status === 200) {
         const result = await response.json()
         facture = result
-        console.log("facture", facture)
         showPanel.value = true
     }
 }
@@ -45,7 +41,6 @@ const deleteFacture = async (id) => {
 }
 
 const refreshData = () => {
-    console.log("refreshData")
     factures.slice(0)
     getAllFactures()
 }
