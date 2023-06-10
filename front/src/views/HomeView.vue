@@ -14,13 +14,11 @@ let nbFacturesImpayéeSemaine = 0
 let CASemaine = 0
 let NewClientsSemaine = 0
 let dateSemaineAvant = new Date()
-dateSemaineAvant.setDate(dateSemaineAvant.getDate() - 7);
+dateSemaineAvant.setDate(1)
 dateSemaineAvant = new Date(dateSemaineAvant).toLocaleDateString()
 
 const getAllFactures = async () => {
     const response = await ServiceFacture.getAllFactures()
-
-    console.log("response", response)
     if (response.status === 200) {
         const result = await response.json()
         factures.splice(0)
@@ -29,7 +27,6 @@ const getAllFactures = async () => {
             facture.datePaiement = new Date(facture.datePaiement).toLocaleDateString()
             factures.push(facture)
         }
-        console.log("factures", factures)
     }
     getFacturesSemaine()
 
@@ -43,13 +40,9 @@ const getAllClients = async () => {
         for (let client of result) {
             client.dateCreation = new Date(client.dateCreation).toLocaleDateString()
             clients.push(client)
-            console.log("clients", client.dateCreation > dateSemaineAvant)
-            if (client.dateCreation > dateSemaineAvant)
+            if (client.dateCreation >= dateSemaineAvant)
             {
-                console.log(NewClientsSemaine)
-
                 NewClientsSemaine += 1
-                console.log(NewClientsSemaine)
             }
         }
     }
@@ -57,7 +50,7 @@ const getAllClients = async () => {
 
 const getFacturesSemaine = async () => {
     for (let facture of factures) {
-        if (facture.dateEmmission > dateSemaineAvant)
+        if (facture.dateEmmission >= dateSemaineAvant)
         {
             facturesSemaine.push(facture)
         }
@@ -72,9 +65,8 @@ const getFacturesImpayeeAndCASemaine = async () => {
             nbFacturesImpayéeSemaine += 1
         } else {
             let total = 0
-            let CASemaine = 0
             for (let produit of facture.produits) {
-                total = total + (produit.quantite * produit.prix)
+                total = total + (produit.quantite * produit.produit.prix)
             }
             CASemaine += total
         }
@@ -92,7 +84,7 @@ getAllClients()
     <div class="Page">
 
         <div class="Titre">
-            <span>Données de la semaine :</span>
+            <span>Données du mois :</span>
         </div>
         <div class="row">
             <div class="taille">
