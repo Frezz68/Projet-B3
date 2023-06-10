@@ -36,7 +36,6 @@ let nomPrenomClient = props.facture ? props.facture.Client.nom + props.facture.C
 
 
 const save = async () => {
-    console.log("save", route.path)
     switch (route.path) {
         case "/produits":
             const dataProduit = JSON.stringify({
@@ -60,7 +59,6 @@ const save = async () => {
             refresh();
             break;
         case "/commandes":
-            console.log("commandes")
             showPanel.value = !showPanel
             break;
         case "/clients":
@@ -92,7 +90,6 @@ const save = async () => {
             const dataFacture = JSON.stringify({
                 payee: payee
             });
-            console.log(dataFacture)
             if (props.facture.idFacture ) {
                 const response = await ServiceFacture.updateFacture(props.facture.idFacture, dataFacture)
                 if (response.status === 200) {
@@ -102,7 +99,6 @@ const save = async () => {
             refresh();
             break;
         default:
-            console.log("error")
             showPanel.value = !showPanel
             break;
     }
