@@ -2,9 +2,13 @@
   "name": "back-crm",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +19,22 @@
   "bugs": {
     "url": "https://github.com/Frezz68/Projet-B3/issues"
   },
-  "homepage": "https://github.com/Frezz68/Projet-B3#readme"
+  "homepage": "https://github.com/Frezz68/Projet-B3#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.11",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@types/jsonwebtoken": "^9.0.2",
+    "argon2": "^0.30.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.2.3",
+    "typeorm": "^0.3.15"
+  }
 }
