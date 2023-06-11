@@ -1,3 +1,4 @@
+// service pour les requêtes XHR
 export const ServiceXhr = {
     callWithAuth: async (url, data, methode) => {
         return await fetch(url, {

@@ -8,9 +8,11 @@ import {showPanel} from "@/utils";
 import RightPanel from "@/components/RightPanel.vue";
 import {ServiceClients} from "@/services/ServiceClient";
 
+// initialisation des variables factures et facture
 let factures = reactive([])
 let facture = reactive([])
 
+// fonction pour récupérer toutes les factures
 const getAllFactures = async () => {
     const response = await ServiceFacture.getAllFactures()
     if (response.status === 200) {
@@ -28,6 +30,7 @@ const getAllFactures = async () => {
     }
 }
 
+// fonction pour editer une facture en fonction de son id
 const editFactures = async (id) => {
     const response = await ServiceFacture.getFactureById(id)
     if (response.status === 200) {
@@ -37,6 +40,7 @@ const editFactures = async (id) => {
     }
 }
 
+// fonction pour supprimer une facture en fonction de son id
 const deleteFacture = async (id) => {
     const response = await ServiceFacture.deleteFacture(id)
     if (response.status === 200) {
@@ -44,21 +48,24 @@ const deleteFacture = async (id) => {
     }
 }
 
+// fonction pour rafraichir les données de la page
 const refreshData = () => {
     factures.slice(0)
     getAllFactures()
 }
 
-getAllFactures()
+// fonction pour générer un pdf
 const generatePDF = (facture) => {
     let total = 0
+    // calcul du total
     for (let produit of facture.produits) {
         total = total + (produit.quantite * produit.produit.prix)
     }
+    // 20% de TVA
     let totalTVA = total * 1.2
     total = total.toString()
     totalTVA = totalTVA.toString()
-
+    // création du pdf
     let props = {
         outputType: jsPDFInvoiceTemplate.Save,
         returnJsPDFDocObject: true,
@@ -86,12 +93,14 @@ const generatePDF = (facture) => {
                 left: 0 //negative or positive num, from the current position
             }
         },
+      // adresse de l'entreprise
         business: {
             name: "Ynov Nantes",
             address: "20 Bd Général de Gaulle, 44200 Nantes",
             phone: "02 28 44 04 40",
             website: "https://www.ynov.com/campus/nantes/",
         },
+      // adresse du client
         contact: {
             label: "Facture de: ",
             name: facture.Client.nom + " " + facture.Client.prenom,
@@ -99,6 +108,7 @@ const generatePDF = (facture) => {
             phone: "Telephone : " + facture.Client.telephone,
             email: "Email : " + facture.Client.email,
         },
+      // informations sur la facture
         invoice: {
             label: "Numero de Facture: ",
             num: facture.idFacture,
@@ -132,6 +142,7 @@ const generatePDF = (facture) => {
                 { title: "Quantité", value: "quantite"},
                 { title: "Total", value: "total"}
             ],
+          // tableau des produits
             table: Array.from(Array(facture.produits.length), (item, index)=> {
                 return  [
                     facture.produits[index].produit.idProduit,
@@ -142,6 +153,7 @@ const generatePDF = (facture) => {
                     facture.produits[index].quantite * facture.produits[index].produit.prix
                 ];
             }),
+          // informations sur le total
             additionalRows: [{
                 col1: 'Total:',
                 col2: totalTVA,
@@ -201,7 +213,8 @@ const generatePDF = (facture) => {
     const pdfObject = jsPDFInvoiceTemplate(props);
 }
 
-
+// appel de la fonction
+getAllFactures()
 
 </script>
 

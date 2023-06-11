@@ -14,6 +14,7 @@ import {User} from "./User";
 import {Produit} from "./Produit";
 import {FactureProduit} from "./FactureProduit";
 
+// entité Facture
 @Entity()
 export class Facture {
     @PrimaryGeneratedColumn()

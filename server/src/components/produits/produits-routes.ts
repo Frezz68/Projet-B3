@@ -4,6 +4,7 @@ import * as ProduitsControllers from './produits-controller';
 
 const produitsRoute = Router();
 
+// initialisation des routes pour les produits avec leurs méthodes et middlewares
 produitsRoute.get('/',checkToken, ProduitsControllers.getProduits);
 
 produitsRoute.get('/:id',checkToken, ProduitsControllers.getProduitById);

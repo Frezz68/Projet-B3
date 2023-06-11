@@ -1,5 +1,6 @@
 import {ServiceXhr} from "./ServiceXhr";
 
+// méthodes pour appeler les services liés aux utilisateurs
 export const ServiceUtilisateur = {
     logIn: async (login, password) => {
         const data = JSON.stringify({login: login, password: password});

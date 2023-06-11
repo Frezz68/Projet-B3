@@ -6,15 +6,19 @@ import Modal from "@/components/ModalCommande.vue";
 import {ServiceClients} from "@/services/ServiceClient";
 import {ServiceFacture} from "@/services/ServiceFacture";
 
+// initialisation des variables reactive
 let lstClients = reactive([])
 let selectedIdClient = ref()
 let produitsFacture = reactive([])
 let modifValue= ref()
 let isModif = true;
 let diffStock = ref(0)
+
+// fonction pour créer une commande
 const createCommande = () => {
     showCreateCommande.value = !showCreateCommande.value
 }
+// fonction pour afficher le tableau de creation de commande
 const init = async () => {
     showCreateCommande.value = false
     const response = await ServiceClients.getAllClients();
@@ -27,6 +31,7 @@ const init = async () => {
     }
     produitsFacture.splice(0)
 }
+// fonction pour ajouter un produit dans la commande
 const addProduit = (produit) => {
     const tmp = produitsFacture.find(produitFacture => produitFacture.id === produit.id)
     if(tmp){
@@ -35,6 +40,7 @@ const addProduit = (produit) => {
         produitsFacture.push(produit)
     }
 }
+// fonction pour editer un produit dans le tableau de creation de commande
 const afficherEdition = (id) => {
     const tmp = produitsFacture.find(produitFacture => produitFacture.id === id)
     if(tmp){
@@ -46,6 +52,8 @@ const afficherEdition = (id) => {
         }
     }
 }
+
+// fonction pour valider l'edition d'un produit dans le tableau de creation de commande
 const editProduit = (id) => {
     const tmp = produitsFacture.find(produitFacture => produitFacture.id === id)
     if(tmp){
@@ -56,12 +64,14 @@ const editProduit = (id) => {
         tmp.modif = !tmp.modif
     }
 }
+// fonction pour supprimer un produit dans le tableau de creation de commande
 const deleteProduit = (id) => {
     const tmp = produitsFacture.find(produitFacture => produitFacture.id === id)
     if(tmp){
         produitsFacture.splice(produitsFacture.indexOf(tmp), 1)
     }
 }
+// fonction pour vérifier les stock des produits
 const checkStock = (produit) => {
     if (modifValue.value > produit.qteMax){
         modifValue.value = produit.qteMax;
@@ -69,6 +79,7 @@ const checkStock = (produit) => {
     diffStock.value = produit.qteMax - modifValue.value
 }
 
+// fonction pour créer une facture
 const createFacture = async () => {
     if(produitsFacture.length === 0){
         alert("Veuillez ajouter des produits à la commande")

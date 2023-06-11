@@ -2,6 +2,7 @@ import {Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany} from 'typ
 import {Facture} from "./Facture";
 import {FactureProduit} from "./FactureProduit";
 
+// entité Produit
 @Entity()
 export class Produit {
     @PrimaryGeneratedColumn()

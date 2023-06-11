@@ -7,6 +7,7 @@ import ClientsView from "@/views/ClientsView.vue";
 import FacturesView from "@/views/FacturesView.vue";
 import CommandesView from "@/views/CommandesView.vue";
 
+// initialisation du router de l'application
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

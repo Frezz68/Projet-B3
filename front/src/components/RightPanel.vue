@@ -6,6 +6,7 @@ import { ServiceClients } from "../services/ServiceClient.js";
 import { ServiceFacture } from "../services/ServiceFacture.js";
 const route = useRoute()
 
+// initialisation des emits et props
 const emit = defineEmits(['refresh']);
 
 const props = defineProps({
@@ -14,6 +15,7 @@ const props = defineProps({
     facture: Object
 })
 
+// initialisation des variables en fonction de la route
 let nameProduit = props.produit ? props.produit.nom :""
 let prixProduit = props.produit ? props.produit.prix :""
 let quantiteProduit = props.produit ? props.produit.qteStock :""
@@ -35,8 +37,9 @@ let dateEmission = props.facture ? new Date(props.facture.dateEmmission).toISOSt
 let payee = props.facture ? props.facture.payee :""
 let nomPrenomClient = props.facture ? props.facture.Client.nom + props.facture.Client.prenom :""
 
-
+// fonction pour sauvegarder les modifications
 const save = async () => {
+  // en fonction de la route on sauvegarde les modifications
     switch (route.path) {
         case "/produits":
             const dataProduit = JSON.stringify({
@@ -105,6 +108,7 @@ const save = async () => {
     }
 
 }
+// fonction pour rafraichir la page
 const refresh = () => {
     emit('refresh')
 }

@@ -35,11 +35,13 @@ const editProduit = async (id) => {
   }
 }
 
+// fonction pour rafraichir les données de la page
 const refreshData = () => {
     produits.slice(0)
     getAllProduits()
 }
 
+// appel de la fonction getAllProduits
 getAllProduits()
 
 </script>

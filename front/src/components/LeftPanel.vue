@@ -3,6 +3,7 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
+// fonction pour savoir si la route est active
 const isActiveRoute = (path) => {
   return route.path === path;
 };

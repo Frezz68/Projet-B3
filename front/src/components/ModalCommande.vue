@@ -2,16 +2,20 @@
 import {reactive, ref} from "vue";
 import { ServiceProduits } from "../services/ServiceProduit.js";
 import {showPanel} from "@/utils";
+// initialisation des variables reactive
 let produitsExistants = reactive([])
 let produits = reactive([])
 let selectedProduit = reactive([])
 let quantite = ref()
 let diffStock = ref(0)
 
+// initialisation des props et emits
 const emits = defineEmits(['sendProduit'])
 const props = defineProps({
     produitsInFacture: Object
 })
+
+// fonction pour recuperer les produits
 const getAllProduit = async () => {
     const response = await ServiceProduits.getAllProduits()
     if (response.status === 200) {
@@ -27,10 +31,12 @@ const getAllProduit = async () => {
         }
     }
 }
+// fonction pour fermer la modal
 const closePopUp = () => {
     showPanel.value = false
 }
 
+// fonction pour ajouter un produit
 const addProduit = async () => {
     if(quantite.value > 0){
       if (selectedProduit){
@@ -48,13 +54,14 @@ const addProduit = async () => {
       }
     }
 }
+// fonction pour verifier la quantite du stock
 const checkStock = () => {
     if (quantite.value > selectedProduit.qteStock) {
         quantite.value = selectedProduit.qteStock;
     }
     diffStock.value = selectedProduit.qteStock - quantite.value
 }
-
+// fonction pour recuperer les produits
 getAllProduit()
 </script>
 

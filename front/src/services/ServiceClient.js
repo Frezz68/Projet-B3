@@ -1,5 +1,6 @@
 import { ServiceXhr } from "./ServiceXhr";
 
+// méthodes pour appeler les services liés aux clients
 export const ServiceClients = {
     getAllClients: async () => {
         return ServiceXhr.callWithAuthNoBody('http://localhost:3000/api/v1/client/', "GET");

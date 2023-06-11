@@ -6,10 +6,11 @@ import {reactive} from "vue";
 import {ServiceFacture} from "@/services/ServiceFacture";
 import {ServiceClients} from "@/services/ServiceClient";
 
+// initialisation des variables reactive
 let factures = reactive([])
 let facturesSemaine = reactive([])
 let clients = reactive([])
-
+// initialisation des variables pour les données du mois
 let nbFacturesImpayéeSemaine = 0
 let CASemaine = 0
 let NewClientsSemaine = 0
@@ -17,6 +18,7 @@ let dateSemaineAvant = new Date()
 dateSemaineAvant.setDate(1)
 dateSemaineAvant = new Date(dateSemaineAvant).toLocaleDateString()
 
+// fonction pour récupérer toutes les factures
 const getAllFactures = async () => {
     const response = await ServiceFacture.getAllFactures()
     if (response.status === 200) {
@@ -29,9 +31,9 @@ const getAllFactures = async () => {
         }
     }
     getFacturesSemaine()
-
 }
 
+// fonction pour récupérer tous les clients
 const getAllClients = async () => {
     const response = await ServiceClients.getAllClients()
     if (response.status === 200) {
@@ -48,6 +50,7 @@ const getAllClients = async () => {
     }
 }
 
+// fonction pour récupérer les factures de la semaine
 const getFacturesSemaine = async () => {
     for (let facture of factures) {
         if (facture.dateEmmission >= dateSemaineAvant)
@@ -58,6 +61,7 @@ const getFacturesSemaine = async () => {
     getFacturesImpayeeAndCASemaine()
 }
 
+// fonction pour récupérer les factures impayées et le CA de la semaine
 const getFacturesImpayeeAndCASemaine = async () => {
     for (let facture of facturesSemaine) {
         if (facture.payee == false)
@@ -73,6 +77,7 @@ const getFacturesImpayeeAndCASemaine = async () => {
     }
 }
 
+// fonction pour rafraichir les données de la page
 getAllFactures()
 getAllClients()
 

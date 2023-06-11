@@ -1,6 +1,7 @@
 import {Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany} from 'typeorm';
 import {Facture} from "./Facture";
 
+// entité Client
 @Entity()
 export class Client {
     @PrimaryGeneratedColumn()

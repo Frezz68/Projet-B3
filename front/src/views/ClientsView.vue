@@ -4,11 +4,12 @@ import {reactive} from "vue";
 import {showPanel} from "@/utils";
 import LeftPanel from "@/components/LeftPanel.vue";
 import RightPanel from "@/components/RightPanel.vue";
-
+// initialisation des variables clients et client
 let clients = reactive([])
 
 let client = reactive([])
 
+// fonction pour récupérer tous les clients
 const getAllClients = async () => {
   const response = await ServiceClients.getAllClients()
   if (response.status === 200) {
@@ -20,12 +21,15 @@ const getAllClients = async () => {
   }
 }
 
+// fonction pour supprimer un client
 const deleteClient = async (id) => {
   const response = await ServiceClients.deleteClient(id)
   if (response.status === 200) {
       getAllClients()
   }
 }
+
+// fonction pour modifier un client
 const editClient = async (id) => {
   const response = await ServiceClients.getClientById(id)
   if (response.status === 200) {
@@ -35,11 +39,12 @@ const editClient = async (id) => {
   }
 }
 
+// fonction pour rafraichir les données de la page
 const refreshData = () => {
     clients.slice(0)
     getAllClients()
 }
-
+// appel de la fonction getAllClients
 getAllClients()
 
 </script>

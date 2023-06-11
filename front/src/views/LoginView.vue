@@ -6,8 +6,10 @@ let login;
 let password;
 
 const router = useRouter();
+// fonction pour se connecter
 const logIn = async () => {
     if(login.trim() !== "" && password.trim() !== "") {
+      // appel de la fonction logIn du service ServiceUtilisateur
         ServiceUtilisateur.logIn(login, password)
             .then(async (response) => {
                 const result = await response.json();

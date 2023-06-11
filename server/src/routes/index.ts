@@ -6,6 +6,7 @@ import produitsRoutes from '../components/produits/produits-routes';
 
 const API_V1_ROUTER = Router();
 
+//initialisation de toutes les routes
 API_V1_ROUTER.use('/user', userRoutes);
 
 API_V1_ROUTER.use('/facture', facturesRoutes);
